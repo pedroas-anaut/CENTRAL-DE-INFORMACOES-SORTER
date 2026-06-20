@@ -107,6 +107,13 @@
   .pcode{font-family:var(--mono);font-size:12px;color:var(--txt2);margin-top:1px}
   .item .codetag{font-family:var(--mono);font-size:10px;color:var(--txt3);background:#0c1015;border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:4px}
   .item .ic.chain{color:#7fd4ff}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .mgrid .munit{display:block;font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
+  .mgrid input{width:100%}
+  .popup .motor{margin-top:11px;border-top:1px solid var(--line);padding-top:9px}
+  .popup .motor .mh{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--txt3);margin-bottom:6px}
+  .popup .mrow{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--txt2);padding:2px 0}
+  .popup .mrow b{color:var(--txt);font-family:var(--mono)}
   .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(18px);background:#0c1015;border:1px solid var(--line);color:var(--txt);padding:9px 15px;border-radius:9px;font-size:13px;opacity:0;transition:.25s;z-index:50;box-shadow:0 8px 24px #000a}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   input[type=file]{display:none}
@@ -160,6 +167,17 @@
         <div class="seein" id="pSeeIn" style="display:none"></div>
         <label>Tipo (cor)</label>
         <select id="pType"><option value="conv">Transportador</option><option value="sorter">Sorter</option><option value="infeed">Infeed</option><option value="chute">Chute</option><option value="scanner">Scanner</option><option value="outro">Outro</option></select>
+        <div id="pMotorBlock" style="display:none">
+          <label>Dados do motor</label>
+          <div class="mgrid">
+            <div><span class="munit">Corrente nominal (A)</span><input id="pCorrente" inputmode="decimal" placeholder="A" /></div>
+            <div><span class="munit">Tensão nominal (V)</span><input id="pTensao" inputmode="decimal" placeholder="V" /></div>
+            <div><span class="munit">Potência (kW)</span><input id="pKw" inputmode="decimal" placeholder="kW" /></div>
+            <div><span class="munit">Frequência (Hz)</span><input id="pHz" inputmode="decimal" placeholder="Hz" /></div>
+          </div>
+          <label style="margin-top:10px">Dimensões da lona</label>
+          <input id="pLona" placeholder="Ex.: 650 x 4200 mm" />
+        </div>
         <label>Grupo</label>
         <input id="pGroup" list="pGroupList" placeholder="Ex.: Infeeds (digite para criar)" autocomplete="off" />
         <datalist id="pGroupList"></datalist>
@@ -5468,11 +5486,11 @@ const is2d=()=>view!=="3d";
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2200);}
 function esc(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function valid(u){u=(u||"").trim();if(!u)return null;if(!/^https?:\/\//i.test(u)&&!/^mailto:/i.test(u)&&!/^file:/i.test(u))u="https://"+u;return u;}
-function migrate(h){if(!h.links){h.links=h.url?[{title:"Instrução de trabalho",url:h.url}]:[];}delete h.url;if(!Array.isArray(h.links))h.links=[];if(typeof h.group!=="string")h.group="";if(typeof h.code!=="string")h.code="";if(h.kind!=="loc")h.kind="instr";return h;}
+function migrate(h){if(!h.links){h.links=h.url?[{title:"Instrução de trabalho",url:h.url}]:[];}delete h.url;if(!Array.isArray(h.links))h.links=[];if(typeof h.group!=="string")h.group="";if(typeof h.code!=="string")h.code="";if(h.kind!=="loc")h.kind="instr";if(!h.motor||typeof h.motor!=="object")h.motor={corrente:"",tensao:"",kw:"",hz:""};if(typeof h.lona!=="string")h.lona="";return h;}
 function dk(h){return (h.code||"").trim().toLowerCase();}
 function linkedOthers(h){const k=dk(h);if(!k)return [];const out=[];["3d","sup","inf"].forEach(v=>data[v].forEach(x=>{if(x!==h&&dk(x)===k)out.push({v,h:x});}));return out;}
 function viewsWithCode(code,exclude){const k=(code||"").trim().toLowerCase();const out=[];if(!k)return out;["3d","sup","inf"].forEach(v=>{if(v===exclude)return;if(data[v].some(x=>dk(x)===k))out.push(v);});return out;}
-function pushShared(src){const k=dk(src);if(!k)return 0;let n=0;["3d","sup","inf"].forEach(v=>data[v].forEach(x=>{if(x!==src&&dk(x)===k){x.label=src.label;x.type=src.type;x.kind=src.kind;x.group=src.group;x.notes=src.notes;x.links=src.links.map(l=>({title:l.title,url:l.url}));n++;}}));return n;}
+function pushShared(src){const k=dk(src);if(!k)return 0;let n=0;["3d","sup","inf"].forEach(v=>data[v].forEach(x=>{if(x!==src&&dk(x)===k){x.label=src.label;x.type=src.type;x.kind=src.kind;x.group=src.group;x.notes=src.notes;x.links=src.links.map(l=>({title:l.title,url:l.url}));x.motor=Object.assign({},src.motor);x.lona=src.lona;n++;}}));return n;}
 const VIEWNAME={"3d":"3D",sup:"Anel Superior",inf:"Anel Inferior"};
 function clean(h){var o={};for(var k in h)if(k!=="_el")o[k]=h[k];return o;}
 
@@ -5584,7 +5602,10 @@ function buildPopupHTML(h){const t=TYPES[h.type]||TYPES.outro;const links=(h.lin
   let lk="";
   if(links.length) lk='<div class="links">'+links.map(l=>'<a href="'+encodeURI(valid(l.url))+'" target="_blank" rel="noopener">'+esc(l.title||(h.kind==="loc"?"Link":"Instrução"))+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>').join("")+'</div>';
   else if(h.kind!=="loc") lk='<div class="no">Sem instrução cadastrada</div>';
-  return '<div class="bar"></div><button class="x" title="Fechar">×</button><div class="bd"><div class="ty">'+ty+(h.group?' · '+esc(h.group):'')+'</div><h3>'+esc(h.label||"(sem nome)")+'</h3>'+(h.code?'<div class="pcode">'+esc(h.code)+'</div>':'')+(h.notes?'<p class="nt">'+esc(h.notes)+'</p>':'')+lk+'<div class="seein popseein"></div></div>';}
+  let motor="";
+  if(h.type==="conv"&&h.kind!=="loc"&&(h.motor||h.lona)){const m=h.motor||{};const rows=[["Corrente nominal",m.corrente,"A"],["Tensão nominal",m.tensao,"V"],["Potência",m.kw,"kW"],["Frequência",m.hz,"Hz"],["Dimensões da lona",h.lona,""]].filter(r=>r[1]);
+    if(rows.length) motor='<div class="motor"><div class="mh">Dados do transportador</div>'+rows.map(r=>'<div class="mrow"><span>'+r[0]+'</span><b>'+esc(r[1])+(r[2]?(' '+r[2]):'')+'</b></div>').join("")+'</div>';}
+  return '<div class="bar"></div><button class="x" title="Fechar">×</button><div class="bd"><div class="ty">'+ty+(h.group?' · '+esc(h.group):'')+'</div><h3>'+esc(h.label||"(sem nome)")+'</h3>'+(h.code?'<div class="pcode">'+esc(h.code)+'</div>':'')+(h.notes?'<p class="nt">'+esc(h.notes)+'</p>':'')+motor+lk+'<div class="seein popseein"></div></div>';}
 function fillPopupSeeIn(p,h){const box=p.querySelector(".popseein");if(!box)return;const vs=viewsWithCode(h.code,view);
   if(!h.code||!vs.length){box.style.display="none";return;}
   box.style.display="flex";box.innerHTML='<span class="seelbl">Ver em:</span>'+vs.map(v=>'<button class="seebtn" data-v="'+v+'">'+VIEWNAME[v]+'</button>').join("");
@@ -5613,13 +5634,15 @@ function addLinkRow(title,url){const wrap=$("#pLinks");const row=document.create
 function renderLinks(links){const wrap=$("#pLinks");wrap.innerHTML="";if(!links||!links.length){addLinkRow("","");return;}links.forEach(l=>addLinkRow(l.title,l.url));}
 function collectLinks(){const out=[];$("#pLinks").querySelectorAll(".lrow").forEach(r=>{const title=r.querySelector(".lt").value.trim(),url=r.querySelector(".lu").value.trim();if(url||title)out.push({title:title||"Instrução de trabalho",url:url});});return out;}
 function fillGroupDatalist(){const dl=$("#pGroupList");if(!dl)return;const gs=Array.from(new Set(cur().map(h=>(h.group||"").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));dl.innerHTML=gs.map(g=>'<option value="'+esc(g)+'">').join("");}
-function applyKindUI(){const loc=$("#pKind").value==="loc";$("#pInstrBlock").style.display=loc?"none":"block";$("#pTitleLabel").textContent=loc?"Nome da localização":"Nome do equipamento";$("#pLabel").placeholder=loc?"Ex.: Linha D":"Ex.: Transportador de indução 1";}
+function applyKindUI(){const loc=$("#pKind").value==="loc";$("#pInstrBlock").style.display=loc?"none":"block";$("#pTitleLabel").textContent=loc?"Nome da localização":"Nome do equipamento";$("#pLabel").placeholder=loc?"Ex.: Linha D":"Ex.: Transportador de indução 1";applyTypeUI();}
+function applyTypeUI(){const show=$("#pType").value==="conv"&&$("#pKind").value!=="loc";$("#pMotorBlock").style.display=show?"block":"none";}
 function editHot(id){selId=id;const h=cur().find(x=>x.id===id);if(!h)return;migrate(h);
   if(view==="3d")focusPos3D(h.pos); else if(h._el)h._el.scrollIntoView({block:"center",inline:"center",behavior:"smooth"});
   const t=TYPES[h.type]||TYPES.outro,i=cur().indexOf(h)+1;
   $("#pNum").textContent=String(i).padStart(2,"0");$("#pNum").style.background=t.color;
   $("#pLabel").value=h.label||"";$("#pType").value=h.type||"conv";$("#pNotes").value=h.notes||"";
   $("#pKind").value=h.kind||"instr";$("#pGroup").value=h.group||"";$("#pCode").value=h.code||"";
+  const mo=h.motor||{};$("#pCorrente").value=mo.corrente||"";$("#pTensao").value=mo.tensao||"";$("#pKw").value=mo.kw||"";$("#pHz").value=mo.hz||"";$("#pLona").value=h.lona||"";
   fillGroupDatalist();fillCodeDatalist();applyKindUI();updatePullBtn();renderSeeIn();
   renderLinks(h.links);$("#panel").classList.add("show");if(!h.label)setTimeout(()=>$("#pLabel").focus(),30);
   rebuildMarkers();}
@@ -5629,7 +5652,9 @@ function updatePullBtn(){const code=$("#pCode").value.trim();const others=viewsW
 function pullData(){const code=$("#pCode").value.trim().toLowerCase();if(!code)return;let src=null;
   ["3d","sup","inf"].forEach(v=>data[v].forEach(x=>{if(x.id!==selId&&dk(x)===code&&(!src||(x.links||[]).length>(src.links||[]).length||((x.label||"").length>(src.label||"").length)))src=x;}));
   if(!src){toast("Nenhum vínculo encontrado");return;}
-  $("#pLabel").value=src.label||"";$("#pType").value=src.type||"conv";$("#pKind").value=src.kind||"instr";$("#pGroup").value=src.group||"";$("#pNotes").value=src.notes||"";applyKindUI();renderLinks(src.links);toast("Dados puxados do dispositivo vinculado");}
+  $("#pLabel").value=src.label||"";$("#pType").value=src.type||"conv";$("#pKind").value=src.kind||"instr";$("#pGroup").value=src.group||"";$("#pNotes").value=src.notes||"";
+  const mo=src.motor||{};$("#pCorrente").value=mo.corrente||"";$("#pTensao").value=mo.tensao||"";$("#pKw").value=mo.kw||"";$("#pHz").value=mo.hz||"";$("#pLona").value=src.lona||"";
+  applyKindUI();renderLinks(src.links);toast("Dados puxados do dispositivo vinculado");}
 function renderSeeIn(){const h=cur().find(x=>x.id===selId);const box=$("#pSeeIn");if(!h){box.innerHTML="";return;}
   const vs=viewsWithCode(h.code,view);
   if(!h.code||!vs.length){box.innerHTML="";box.style.display="none";return;}
@@ -5638,6 +5663,7 @@ function renderSeeIn(){const h=cur().find(x=>x.id===selId);const box=$("#pSeeIn"
   box.querySelectorAll(".seebtn").forEach(b=>b.onclick=()=>jumpToDevice(h.code,b.dataset.v));}
 function savePanel(){const h=cur().find(x=>x.id===selId);if(!h)return;
   h.label=$("#pLabel").value.trim();h.type=$("#pType").value;h.kind=$("#pKind").value;h.code=$("#pCode").value.trim();h.group=$("#pGroup").value.trim();h.notes=$("#pNotes").value.trim();h.links=collectLinks();
+  h.motor={corrente:$("#pCorrente").value.trim(),tensao:$("#pTensao").value.trim(),kw:$("#pKw").value.trim(),hz:$("#pHz").value.trim()};h.lona=$("#pLona").value.trim();
   const n=pushShared(h);
   rebuildMarkers();persist();refreshList();editHot(h.id);
   toast(n?("Salvo e sincronizado com "+n+" ponto(s) vinculado(s)"):"Ponto salvo");}
@@ -5714,7 +5740,7 @@ addEventListener("DOMContentLoaded",()=>{
   $("#sheet").addEventListener("click",onSheetClick);
   $("#btnAdd").onclick=()=>{ if(view==="3d"&&!model){toast("Carregue o modelo 3D primeiro");return;} setAddMode(!addMode); };
   $("#btnFrame").onclick=frameAll; $("#btnCam").onclick=useAuthoredCam;
-  $("#pAddLink").onclick=()=>addLinkRow("",""); $("#pKind").onchange=applyKindUI;
+  $("#pAddLink").onclick=()=>addLinkRow("",""); $("#pKind").onchange=applyKindUI; $("#pType").onchange=applyTypeUI;
   $("#pCode").addEventListener("input",updatePullBtn); $("#pPull").onclick=pullData;
   $("#pSave").onclick=savePanel; $("#pDel").onclick=delHot; $("#pClose").onclick=closePanel;
   $("#btnExport").onclick=exportJson; $("#btnImport").onclick=()=>$("#fileJson").click();
