@@ -1,1 +1,3024 @@
-{"v":3,"views":{"3d":[{"id":"3d_33","pos":[242.2421672473603,6.300167232751846,37.54809424646553],"label":"B0080","type":"conv","kind":"instr","code":"B0080","group":"TRANSPORTADORES","notes":"","links":[],"motor":{"corrente":"3.5","tensao":"380","kw":"1.5","hz":"60"},"lona":"1200X5000"}],"sup":[],"inf":[{"id":"inf_39","x":0.9435778507314309,"y":0.19170717529916284,"label":"B0015","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_40","x":0.9427639464808278,"y":0.24543479669300308,"label":"B0010","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_41","x":0.9183174729716959,"y":0.24213073259740014,"label":"B0020","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_43","x":0.9297150302603516,"y":0.27990312745895557,"label":"B0030","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_44","x":0.8971505808641922,"y":0.25956414561042573,"label":"B0040","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_45","x":0.8873812460453444,"y":0.18983049355832338,"label":"B0050","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_46","x":0.8792401336963045,"y":0.09830507523993909,"label":"B0060","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_47","x":0.8409769056558172,"y":0.07360774013815284,"label":"B0070","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_48","x":0.8027136776153299,"y":0.09539950640443483,"label":"B0080","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_49","x":0.795386676501194,"y":0.19709441564708405,"label":"B0090","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_50","x":0.7962007877360979,"y":0.28135591187670766,"label":"B0100","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_51","x":0.79457256526629,"y":0.5283292739784355,"label":"B0110","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_52","x":0.7685210057493624,"y":0.8334140017063832,"label":"B0120","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_53","x":0.7457258911720509,"y":0.7230023859572212,"label":"B0130","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_54","x":0.7457258911720509,"y":0.5341404116494441,"label":"B0140","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_55","x":0.7457258911720509,"y":0.38208230186881065,"label":"B0150","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""},{"id":"inf_56","x":0.7652645608097465,"y":0.29007261838322046,"label":"B0160","type":"conv","kind":"instr","code":"","group":"LINHA B","notes":"","links":[],"motor":{"corrente":"","tensao":"","kw":"","hz":""},"lona":""}]}}
+{
+ "v": 4,
+ "views": {
+  "3d": [],
+  "la": [
+   {
+    "id": "la_seed_A0090",
+    "poly": [
+     [
+      0.85501,
+      0.55897
+     ],
+     [
+      0.91134,
+      0.55897
+     ],
+     [
+      0.91134,
+      0.60963
+     ],
+     [
+      0.85501,
+      0.60963
+     ]
+    ],
+    "label": "A0090",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0090",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0140",
+    "poly": [
+     [
+      0.18714,
+      0.78654
+     ],
+     [
+      0.35538,
+      0.78654
+     ],
+     [
+      0.35538,
+      0.83721
+     ],
+     [
+      0.18714,
+      0.83721
+     ]
+    ],
+    "label": "A0140",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0140",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0150",
+    "poly": [
+     [
+      0.35828,
+      0.78654
+     ],
+     [
+      0.52616,
+      0.78654
+     ],
+     [
+      0.52616,
+      0.83721
+     ],
+     [
+      0.35828,
+      0.83721
+     ]
+    ],
+    "label": "A0150",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0150",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0100",
+    "poly": [
+     [
+      0.75509,
+      0.55897
+     ],
+     [
+      0.85247,
+      0.55897
+     ],
+     [
+      0.85247,
+      0.60963
+     ],
+     [
+      0.75509,
+      0.60963
+     ]
+    ],
+    "label": "A0100",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0100",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0160",
+    "poly": [
+     [
+      0.52907,
+      0.78654
+     ],
+     [
+      0.69731,
+      0.78654
+     ],
+     [
+      0.69731,
+      0.83721
+     ],
+     [
+      0.52907,
+      0.83721
+     ]
+    ],
+    "label": "A0160",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0160",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0060",
+    "poly": [
+     [
+      0.53307,
+      0.36379
+     ],
+     [
+      0.69876,
+      0.36379
+     ],
+     [
+      0.69876,
+      0.41362
+     ],
+     [
+      0.53307,
+      0.41362
+     ]
+    ],
+    "label": "A0060",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0060",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0020",
+    "poly": [
+     [
+      0.36846,
+      0.70515
+     ],
+     [
+      0.44731,
+      0.70515
+     ],
+     [
+      0.44731,
+      0.75581
+     ],
+     [
+      0.36846,
+      0.75581
+     ]
+    ],
+    "label": "A0020",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0020",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0050",
+    "poly": [
+     [
+      0.39353,
+      0.36379
+     ],
+     [
+      0.53052,
+      0.36379
+     ],
+     [
+      0.53052,
+      0.41362
+     ],
+     [
+      0.39353,
+      0.41362
+     ]
+    ],
+    "label": "A0050",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0050",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0010",
+    "poly": [
+     [
+      0.34193,
+      0.84219
+     ],
+     [
+      0.44731,
+      0.84219
+     ],
+     [
+      0.44731,
+      0.98671
+     ],
+     [
+      0.34193,
+      0.98671
+     ]
+    ],
+    "label": "A0010",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0010",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0070",
+    "poly": [
+     [
+      0.70167,
+      0.36379
+     ],
+     [
+      0.88372,
+      0.36379
+     ],
+     [
+      0.88372,
+      0.41362
+     ],
+     [
+      0.70167,
+      0.41362
+     ]
+    ],
+    "label": "A0070",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0070",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0170",
+    "poly": [
+     [
+      0.64172,
+      0.55897
+     ],
+     [
+      0.75218,
+      0.55897
+     ],
+     [
+      0.75218,
+      0.60963
+     ],
+     [
+      0.64172,
+      0.60963
+     ]
+    ],
+    "label": "A0170",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0170",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0080",
+    "poly": [
+     [
+      0.88626,
+      0.35548
+     ],
+     [
+      0.91025,
+      0.35548
+     ],
+     [
+      0.91025,
+      0.55316
+     ],
+     [
+      0.88626,
+      0.55316
+     ]
+    ],
+    "label": "A0080",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0080",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0130",
+    "poly": [
+     [
+      0.18714,
+      0.55814
+     ],
+     [
+      0.21112,
+      0.55814
+     ],
+     [
+      0.21112,
+      0.78156
+     ],
+     [
+      0.18714,
+      0.78156
+     ]
+    ],
+    "label": "A0130",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0130",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A01",
+    "poly": [
+     [
+      0.46221,
+      0.90033
+     ],
+     [
+      0.51672,
+      0.90033
+     ],
+     [
+      0.51672,
+      0.95017
+     ],
+     [
+      0.46221,
+      0.95017
+     ]
+    ],
+    "label": "A01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "A01",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0040",
+    "poly": [
+     [
+      0.34157,
+      0.36379
+     ],
+     [
+      0.39172,
+      0.36379
+     ],
+     [
+      0.39172,
+      0.55648
+     ],
+     [
+      0.34157,
+      0.55648
+     ]
+    ],
+    "label": "A0040",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0040",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0030",
+    "poly": [
+     [
+      0.34193,
+      0.61213
+     ],
+     [
+      0.36555,
+      0.61213
+     ],
+     [
+      0.36555,
+      0.78571
+     ],
+     [
+      0.34193,
+      0.78571
+     ]
+    ],
+    "label": "A0030",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0030",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0120",
+    "poly": [
+     [
+      0.21475,
+      0.55897
+     ],
+     [
+      0.63917,
+      0.55897
+     ],
+     [
+      0.63917,
+      0.60963
+     ],
+     [
+      0.21475,
+      0.60963
+     ]
+    ],
+    "label": "A0120",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0120",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A0110",
+    "poly": [
+     [
+      0.67369,
+      0.61462
+     ],
+     [
+      0.69731,
+      0.61462
+     ],
+     [
+      0.69731,
+      0.78156
+     ],
+     [
+      0.67369,
+      0.78156
+     ]
+    ],
+    "label": "A0110",
+    "type": "conv",
+    "kind": "instr",
+    "code": "A0110",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_A02",
+    "poly": [
+     [
+      0.45058,
+      0.70183
+     ],
+     [
+      0.51417,
+      0.70183
+     ],
+     [
+      0.51417,
+      0.75997
+     ],
+     [
+      0.45058,
+      0.75997
+     ]
+    ],
+    "label": "A02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "A02",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_NC01",
+    "poly": [
+     [
+      0.254,
+      0.05482
+     ],
+     [
+      0.42151,
+      0.05482
+     ],
+     [
+      0.42151,
+      0.10631
+     ],
+     [
+      0.254,
+      0.10631
+     ]
+    ],
+    "label": "NC01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC01",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "la_seed_NC02",
+    "poly": [
+     [
+      0.08285,
+      0.05482
+     ],
+     [
+      0.25109,
+      0.05482
+     ],
+     [
+      0.25109,
+      0.10631
+     ],
+     [
+      0.08285,
+      0.10631
+     ]
+    ],
+    "label": "NC02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC02",
+    "group": "Line A",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   }
+  ],
+  "lb": [
+   {
+    "id": "lb_seed_B0020",
+    "poly": [
+     [
+      0.74409,
+      0.78772
+     ],
+     [
+      0.79964,
+      0.78772
+     ],
+     [
+      0.79964,
+      0.83927
+     ],
+     [
+      0.74409,
+      0.83927
+     ]
+    ],
+    "label": "B0020",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0020",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0010",
+    "poly": [
+     [
+      0.74409,
+      0.86277
+     ],
+     [
+      0.79857,
+      0.86277
+     ],
+     [
+      0.79857,
+      0.91433
+     ],
+     [
+      0.74409,
+      0.91433
+     ]
+    ],
+    "label": "B0010",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0010",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0015",
+    "poly": [
+     [
+      0.80072,
+      0.86277
+     ],
+     [
+      0.96595,
+      0.86277
+     ],
+     [
+      0.96595,
+      0.91433
+     ],
+     [
+      0.80072,
+      0.91433
+     ]
+    ],
+    "label": "B0015",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0015",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0150",
+    "poly": [
+     [
+      0.42796,
+      0.08491
+     ],
+     [
+      0.59964,
+      0.08491
+     ],
+     [
+      0.59964,
+      0.13647
+     ],
+     [
+      0.42796,
+      0.13647
+     ]
+    ],
+    "label": "B0150",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0150",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0140",
+    "poly": [
+     [
+      0.25412,
+      0.08491
+     ],
+     [
+      0.42581,
+      0.08491
+     ],
+     [
+      0.42581,
+      0.13647
+     ],
+     [
+      0.25412,
+      0.13647
+     ]
+    ],
+    "label": "B0140",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0140",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0090",
+    "poly": [
+     [
+      0.6638,
+      0.25929
+     ],
+     [
+      0.82294,
+      0.25929
+     ],
+     [
+      0.82294,
+      0.31084
+     ],
+     [
+      0.6638,
+      0.31084
+     ]
+    ],
+    "label": "B0090",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0090",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0130",
+    "poly": [
+     [
+      0.08065,
+      0.08491
+     ],
+     [
+      0.25197,
+      0.08491
+     ],
+     [
+      0.25197,
+      0.13647
+     ],
+     [
+      0.08065,
+      0.13647
+     ]
+    ],
+    "label": "B0130",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0130",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0070",
+    "poly": [
+     [
+      0.85125,
+      0.36619
+     ],
+     [
+      0.87527,
+      0.36619
+     ],
+     [
+      0.87527,
+      0.558
+     ],
+     [
+      0.85125,
+      0.558
+     ]
+    ],
+    "label": "B0070",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0070",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0160",
+    "poly": [
+     [
+      0.60215,
+      0.08491
+     ],
+     [
+      0.62616,
+      0.08491
+     ],
+     [
+      0.62616,
+      0.25398
+     ],
+     [
+      0.60215,
+      0.25398
+     ]
+    ],
+    "label": "B0160",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0160",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0120",
+    "poly": [
+     [
+      0.08065,
+      0.14102
+     ],
+     [
+      0.10502,
+      0.14102
+     ],
+     [
+      0.10502,
+      0.31084
+     ],
+     [
+      0.08065,
+      0.31084
+     ]
+    ],
+    "label": "B0120",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0120",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0100",
+    "poly": [
+     [
+      0.58172,
+      0.25929
+     ],
+     [
+      0.66165,
+      0.25929
+     ],
+     [
+      0.66165,
+      0.31084
+     ],
+     [
+      0.58172,
+      0.31084
+     ]
+    ],
+    "label": "B0100",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0100",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0060",
+    "poly": [
+     [
+      0.82616,
+      0.56027
+     ],
+     [
+      0.87634,
+      0.56027
+     ],
+     [
+      0.87634,
+      0.6702
+     ],
+     [
+      0.82616,
+      0.6702
+     ]
+    ],
+    "label": "B0060",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0060",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0040",
+    "poly": [
+     [
+      0.7172,
+      0.62017
+     ],
+     [
+      0.7681,
+      0.62017
+     ],
+     [
+      0.7681,
+      0.72555
+     ],
+     [
+      0.7172,
+      0.72555
+     ]
+    ],
+    "label": "B0040",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0040",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0030",
+    "poly": [
+     [
+      0.7172,
+      0.72782
+     ],
+     [
+      0.74194,
+      0.72782
+     ],
+     [
+      0.74194,
+      0.92949
+     ],
+     [
+      0.7172,
+      0.92949
+     ]
+    ],
+    "label": "B0030",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0030",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B02",
+    "poly": [
+     [
+      0.76918,
+      0.61865
+     ],
+     [
+      0.82473,
+      0.61865
+     ],
+     [
+      0.82473,
+      0.6702
+     ],
+     [
+      0.76918,
+      0.6702
+     ]
+    ],
+    "label": "B02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "B02",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0110",
+    "poly": [
+     [
+      0.10717,
+      0.25929
+     ],
+     [
+      0.57921,
+      0.25929
+     ],
+     [
+      0.57921,
+      0.31084
+     ],
+     [
+      0.10717,
+      0.31084
+     ]
+    ],
+    "label": "B0110",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0110",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0080",
+    "poly": [
+     [
+      0.81362,
+      0.24261
+     ],
+     [
+      0.88889,
+      0.24261
+     ],
+     [
+      0.88889,
+      0.40182
+     ],
+     [
+      0.81362,
+      0.40182
+     ]
+    ],
+    "label": "B0080",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0080",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_B0050",
+    "poly": [
+     [
+      0.76523,
+      0.61031
+     ],
+     [
+      0.82616,
+      0.61031
+     ],
+     [
+      0.82616,
+      0.68234
+     ],
+     [
+      0.76523,
+      0.68234
+     ]
+    ],
+    "label": "B0050",
+    "type": "conv",
+    "kind": "instr",
+    "code": "B0050",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_NC01",
+    "poly": [
+     [
+      0.3448,
+      0.59136
+     ],
+     [
+      0.50824,
+      0.59136
+     ],
+     [
+      0.50824,
+      0.64215
+     ],
+     [
+      0.3448,
+      0.64215
+     ]
+    ],
+    "label": "NC01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC01",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lb_seed_NC02",
+    "poly": [
+     [
+      0.16595,
+      0.5906
+     ],
+     [
+      0.34301,
+      0.5906
+     ],
+     [
+      0.34301,
+      0.64215
+     ],
+     [
+      0.16595,
+      0.64215
+     ]
+    ],
+    "label": "NC02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC02",
+    "group": "Line B",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   }
+  ],
+  "lc": [
+   {
+    "id": "lc_seed_C0010",
+    "poly": [
+     [
+      0.18953,
+      0.91258
+     ],
+     [
+      0.27004,
+      0.91258
+     ],
+     [
+      0.27004,
+      0.96396
+     ],
+     [
+      0.18953,
+      0.96396
+     ]
+    ],
+    "label": "C0010",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0010",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0020",
+    "poly": [
+     [
+      0.18953,
+      0.77684
+     ],
+     [
+      0.27004,
+      0.77684
+     ],
+     [
+      0.27004,
+      0.82975
+     ],
+     [
+      0.18953,
+      0.82975
+     ]
+    ],
+    "label": "C0020",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0020",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0100",
+    "poly": [
+     [
+      0.1574,
+      0.06672
+     ],
+     [
+      0.23538,
+      0.06672
+     ],
+     [
+      0.23538,
+      0.11963
+     ],
+     [
+      0.1574,
+      0.11963
+     ]
+    ],
+    "label": "C0100",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0100",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0120",
+    "poly": [
+     [
+      0.37401,
+      0.06672
+     ],
+     [
+      0.45199,
+      0.06672
+     ],
+     [
+      0.45199,
+      0.11963
+     ],
+     [
+      0.37401,
+      0.11963
+     ]
+    ],
+    "label": "C0120",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0120",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0160",
+    "poly": [
+     [
+      0.59061,
+      0.30521
+     ],
+     [
+      0.75487,
+      0.30521
+     ],
+     [
+      0.75487,
+      0.35736
+     ],
+     [
+      0.59061,
+      0.35736
+     ]
+    ],
+    "label": "C0160",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0160",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0170",
+    "poly": [
+     [
+      0.41336,
+      0.30521
+     ],
+     [
+      0.58917,
+      0.30521
+     ],
+     [
+      0.58917,
+      0.35736
+     ],
+     [
+      0.41336,
+      0.35736
+     ]
+    ],
+    "label": "C0170",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0170",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0110",
+    "poly": [
+     [
+      0.23791,
+      0.06672
+     ],
+     [
+      0.37148,
+      0.06672
+     ],
+     [
+      0.37148,
+      0.11963
+     ],
+     [
+      0.23791,
+      0.11963
+     ]
+    ],
+    "label": "C0110",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0110",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0150",
+    "poly": [
+     [
+      0.7574,
+      0.30521
+     ],
+     [
+      0.93213,
+      0.30521
+     ],
+     [
+      0.93213,
+      0.35736
+     ],
+     [
+      0.7574,
+      0.35736
+     ]
+    ],
+    "label": "C0150",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0150",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0130",
+    "poly": [
+     [
+      0.45451,
+      0.06672
+     ],
+     [
+      0.93213,
+      0.06672
+     ],
+     [
+      0.93213,
+      0.11963
+     ],
+     [
+      0.45451,
+      0.11963
+     ]
+    ],
+    "label": "C0130",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0130",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0140",
+    "poly": [
+     [
+      0.90758,
+      0.125
+     ],
+     [
+      0.93213,
+      0.125
+     ],
+     [
+      0.93213,
+      0.29908
+     ],
+     [
+      0.90758,
+      0.29908
+     ]
+    ],
+    "label": "C0140",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0140",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0030",
+    "poly": [
+     [
+      0.16282,
+      0.7569
+     ],
+     [
+      0.187,
+      0.7569
+     ],
+     [
+      0.187,
+      0.97853
+     ],
+     [
+      0.16282,
+      0.97853
+     ]
+    ],
+    "label": "C0030",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0030",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0060",
+    "poly": [
+     [
+      0.16282,
+      0.44018
+     ],
+     [
+      0.187,
+      0.44018
+     ],
+     [
+      0.187,
+      0.54064
+     ],
+     [
+      0.16282,
+      0.54064
+     ]
+    ],
+    "label": "C0060",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0060",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0080",
+    "poly": [
+     [
+      0.16282,
+      0.23006
+     ],
+     [
+      0.18736,
+      0.23006
+     ],
+     [
+      0.18736,
+      0.32975
+     ],
+     [
+      0.16282,
+      0.32975
+     ]
+    ],
+    "label": "C0080",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0080",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0050",
+    "poly": [
+     [
+      0.16282,
+      0.54601
+     ],
+     [
+      0.187,
+      0.54601
+     ],
+     [
+      0.187,
+      0.64571
+     ],
+     [
+      0.16282,
+      0.64571
+     ]
+    ],
+    "label": "C0050",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0050",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0090",
+    "poly": [
+     [
+      0.16282,
+      0.125
+     ],
+     [
+      0.18736,
+      0.125
+     ],
+     [
+      0.18736,
+      0.22546
+     ],
+     [
+      0.16282,
+      0.22546
+     ]
+    ],
+    "label": "C0090",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0090",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0070",
+    "poly": [
+     [
+      0.16282,
+      0.33512
+     ],
+     [
+      0.18736,
+      0.33512
+     ],
+     [
+      0.18736,
+      0.43482
+     ],
+     [
+      0.16282,
+      0.43482
+     ]
+    ],
+    "label": "C0070",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0070",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0040",
+    "poly": [
+     [
+      0.16282,
+      0.65184
+     ],
+     [
+      0.18736,
+      0.65184
+     ],
+     [
+      0.18736,
+      0.75153
+     ],
+     [
+      0.16282,
+      0.75153
+     ]
+    ],
+    "label": "C0040",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0040",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C0180",
+    "poly": [
+     [
+      0.41336,
+      0.125
+     ],
+     [
+      0.43791,
+      0.125
+     ],
+     [
+      0.43791,
+      0.29908
+     ],
+     [
+      0.41336,
+      0.29908
+     ]
+    ],
+    "label": "C0180",
+    "type": "conv",
+    "kind": "instr",
+    "code": "C0180",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C02",
+    "poly": [
+     [
+      0.29964,
+      0.76687
+     ],
+     [
+      0.35379,
+      0.76687
+     ],
+     [
+      0.35379,
+      0.83589
+     ],
+     [
+      0.29964,
+      0.83589
+     ]
+    ],
+    "label": "C02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "C02",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_C01",
+    "poly": [
+     [
+      0.29964,
+      0.87807
+     ],
+     [
+      0.35379,
+      0.87807
+     ],
+     [
+      0.35379,
+      0.94325
+     ],
+     [
+      0.29964,
+      0.94325
+     ]
+    ],
+    "label": "C01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "C01",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_NC01",
+    "poly": [
+     [
+      0.53321,
+      0.65951
+     ],
+     [
+      0.70975,
+      0.65951
+     ],
+     [
+      0.70975,
+      0.71089
+     ],
+     [
+      0.53321,
+      0.71089
+     ]
+    ],
+    "label": "NC01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC01",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "lc_seed_NC02",
+    "poly": [
+     [
+      0.70975,
+      0.65951
+     ],
+     [
+      0.87437,
+      0.65951
+     ],
+     [
+      0.87437,
+      0.71089
+     ],
+     [
+      0.70975,
+      0.71089
+     ]
+    ],
+    "label": "NC02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC02",
+    "group": "Line C",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   }
+  ],
+  "ld": [
+   {
+    "id": "ld_seed_D0110",
+    "poly": [
+     [
+      0.22917,
+      0.19409
+     ],
+     [
+      0.28981,
+      0.19409
+     ],
+     [
+      0.28981,
+      0.2476
+     ],
+     [
+      0.22917,
+      0.2476
+     ]
+    ],
+    "label": "D0110",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0110",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0120",
+    "poly": [
+     [
+      0.28981,
+      0.19409
+     ],
+     [
+      0.38244,
+      0.19409
+     ],
+     [
+      0.38244,
+      0.2476
+     ],
+     [
+      0.28981,
+      0.2476
+     ]
+    ],
+    "label": "D0120",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0120",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0130",
+    "poly": [
+     [
+      0.38244,
+      0.19409
+     ],
+     [
+      0.47619,
+      0.19409
+     ],
+     [
+      0.47619,
+      0.2476
+     ],
+     [
+      0.38244,
+      0.2476
+     ]
+    ],
+    "label": "D0130",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0130",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0100",
+    "poly": [
+     [
+      0.23438,
+      0.2484
+     ],
+     [
+      0.25893,
+      0.2484
+     ],
+     [
+      0.25893,
+      0.34345
+     ],
+     [
+      0.23438,
+      0.34345
+     ]
+    ],
+    "label": "D0100",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0100",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0090",
+    "poly": [
+     [
+      0.23438,
+      0.34345
+     ],
+     [
+      0.25893,
+      0.34345
+     ],
+     [
+      0.25893,
+      0.4377
+     ],
+     [
+      0.23438,
+      0.4377
+     ]
+    ],
+    "label": "D0090",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0090",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0080",
+    "poly": [
+     [
+      0.23438,
+      0.4377
+     ],
+     [
+      0.25893,
+      0.4377
+     ],
+     [
+      0.25893,
+      0.53115
+     ],
+     [
+      0.23438,
+      0.53115
+     ]
+    ],
+    "label": "D0080",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0080",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0070",
+    "poly": [
+     [
+      0.23438,
+      0.53115
+     ],
+     [
+      0.25893,
+      0.53115
+     ],
+     [
+      0.25893,
+      0.6246
+     ],
+     [
+      0.23438,
+      0.6246
+     ]
+    ],
+    "label": "D0070",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0070",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0060",
+    "poly": [
+     [
+      0.23438,
+      0.6246
+     ],
+     [
+      0.25893,
+      0.6246
+     ],
+     [
+      0.25893,
+      0.71885
+     ],
+     [
+      0.23438,
+      0.71885
+     ]
+    ],
+    "label": "D0060",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0060",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0050",
+    "poly": [
+     [
+      0.23438,
+      0.71885
+     ],
+     [
+      0.25893,
+      0.71885
+     ],
+     [
+      0.25893,
+      0.8139
+     ],
+     [
+      0.23438,
+      0.8139
+     ]
+    ],
+    "label": "D0050",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0050",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0040",
+    "poly": [
+     [
+      0.23438,
+      0.8139
+     ],
+     [
+      0.25893,
+      0.8139
+     ],
+     [
+      0.25893,
+      0.90575
+     ],
+     [
+      0.23438,
+      0.90575
+     ]
+    ],
+    "label": "D0040",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0040",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0030",
+    "poly": [
+     [
+      0.20647,
+      0.63738
+     ],
+     [
+      0.23177,
+      0.63738
+     ],
+     [
+      0.23177,
+      0.69968
+     ],
+     [
+      0.20647,
+      0.69968
+     ]
+    ],
+    "label": "D0030",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0030",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0020",
+    "poly": [
+     [
+      0.10789,
+      0.8107
+     ],
+     [
+      0.23624,
+      0.8107
+     ],
+     [
+      0.23624,
+      0.86661
+     ],
+     [
+      0.10789,
+      0.86661
+     ]
+    ],
+    "label": "D0020",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0020",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0010",
+    "poly": [
+     [
+      0.12835,
+      0.86661
+     ],
+     [
+      0.15625,
+      0.86661
+     ],
+     [
+      0.15625,
+      0.94649
+     ],
+     [
+      0.12835,
+      0.94649
+     ]
+    ],
+    "label": "D0010",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0010",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D01",
+    "poly": [
+     [
+      0.32924,
+      0.77077
+     ],
+     [
+      0.39062,
+      0.77077
+     ],
+     [
+      0.39062,
+      0.83866
+     ],
+     [
+      0.32924,
+      0.83866
+     ]
+    ],
+    "label": "D01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "D01",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0015",
+    "poly": [
+     [
+      0.31473,
+      0.93291
+     ],
+     [
+      0.45908,
+      0.93291
+     ],
+     [
+      0.45908,
+      0.98562
+     ],
+     [
+      0.31473,
+      0.98562
+     ]
+    ],
+    "label": "D0015",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0015",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0180",
+    "poly": [
+     [
+      0.4561,
+      0.0639
+     ],
+     [
+      0.62723,
+      0.0639
+     ],
+     [
+      0.62723,
+      0.11661
+     ],
+     [
+      0.4561,
+      0.11661
+     ]
+    ],
+    "label": "D0180",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0180",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0190",
+    "poly": [
+     [
+      0.4561,
+      0.11741
+     ],
+     [
+      0.62723,
+      0.11741
+     ],
+     [
+      0.62723,
+      0.19489
+     ],
+     [
+      0.4561,
+      0.19489
+     ]
+    ],
+    "label": "D0190",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0190",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0170",
+    "poly": [
+     [
+      0.62723,
+      0.0639
+     ],
+     [
+      0.79836,
+      0.0639
+     ],
+     [
+      0.79836,
+      0.11661
+     ],
+     [
+      0.62723,
+      0.11661
+     ]
+    ],
+    "label": "D0170",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0170",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0140",
+    "poly": [
+     [
+      0.62723,
+      0.11741
+     ],
+     [
+      0.79836,
+      0.11741
+     ],
+     [
+      0.79836,
+      0.19489
+     ],
+     [
+      0.62723,
+      0.19489
+     ]
+    ],
+    "label": "D0140",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0140",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0160",
+    "poly": [
+     [
+      0.79836,
+      0.0639
+     ],
+     [
+      0.97247,
+      0.0639
+     ],
+     [
+      0.97247,
+      0.11661
+     ],
+     [
+      0.79836,
+      0.11661
+     ]
+    ],
+    "label": "D0160",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0160",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_D0150",
+    "poly": [
+     [
+      0.79836,
+      0.11741
+     ],
+     [
+      0.97247,
+      0.11741
+     ],
+     [
+      0.97247,
+      0.19489
+     ],
+     [
+      0.79836,
+      0.19489
+     ]
+    ],
+    "label": "D0150",
+    "type": "conv",
+    "kind": "instr",
+    "code": "D0150",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_NC01",
+    "poly": [
+     [
+      0.54241,
+      0.51837
+     ],
+     [
+      0.71131,
+      0.51837
+     ],
+     [
+      0.71131,
+      0.56949
+     ],
+     [
+      0.54241,
+      0.56949
+     ]
+    ],
+    "label": "NC01",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC01",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   },
+   {
+    "id": "ld_seed_NC02",
+    "poly": [
+     [
+      0.71391,
+      0.51837
+     ],
+     [
+      0.88244,
+      0.51837
+     ],
+     [
+      0.88244,
+      0.56949
+     ],
+     [
+      0.71391,
+      0.56949
+     ]
+    ],
+    "label": "NC02",
+    "type": "outro",
+    "kind": "instr",
+    "code": "NC02",
+    "group": "Line D",
+    "notes": "",
+    "links": [],
+    "motor": {
+     "corrente": "",
+     "tensao": "",
+     "kw": "",
+     "hz": ""
+    },
+    "lona": ""
+   }
+  ]
+ }
+}
