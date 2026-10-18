@@ -160,6 +160,10 @@
   .mfoot .btn:disabled{opacity:.5;cursor:not-allowed}
   .syncbar{position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:55;display:none;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;background:#2a210d;border:1px solid #6b5316;color:#ffe3a0;padding:9px 14px;border-radius:10px;font-size:13px;box-shadow:0 10px 30px #000a;max-width:94vw}
   .syncbar.show{display:flex}
+  .pwbox{width:min(420px,94vw)}
+  .pwerr{color:#F87171;font-size:12px;min-height:16px}
+  .pwinfo{font-family:var(--mono);font-size:12px;color:var(--txt);line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;word-break:break-all;user-select:all}
+  #pwModal .cpinput{width:100%}
   .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(18px);background:#0c1015;border:1px solid var(--line);color:var(--txt);padding:9px 15px;border-radius:9px;font-size:13px;opacity:0;transition:.25s;z-index:50;box-shadow:0 8px 24px #000a}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   input[type=file]{display:none}
@@ -286,6 +290,18 @@
 </div>
 <div id="syncBar" class="syncbar"><span id="syncMsg">Existe uma versão publicada diferente da que está neste navegador.</span>
   <button class="btn sm" id="syncUse">Usar a publicada</button><button class="btn sm" id="syncKeep">Manter a minha</button><button class="btn sm primary" id="syncExport">Exportar a minha</button></div>
+<div id="pwModal" class="modal">
+  <div class="mbox pwbox">
+    <div class="mhead"><div><b id="pwTitle">Senha de edição</b><br><small id="pwSub"></small></div><button id="pwClose" title="Fechar">×</button></div>
+    <div class="mbody">
+      <input type="password" id="pwInput" class="cpinput" autocomplete="off" placeholder="Senha">
+      <input type="password" id="pwInput2" class="cpinput" autocomplete="off" placeholder="Repita a senha" style="display:none">
+      <div id="pwErr" class="pwerr"></div>
+      <div id="pwInfo" class="pwinfo" style="display:none"></div>
+    </div>
+    <div class="mfoot"><span></span><div style="display:flex;gap:8px"><button class="btn" id="pwCancel">Cancelar</button><button class="btn primary" id="pwOk">Entrar</button></div></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <input type="file" id="file" accept=".glb,model/gltf-binary" />
 <input type="file" id="fileJson" accept=".json,application/json" />
@@ -10052,7 +10068,7 @@ function refreshList(){const wrap=$("#list");$("#listCount").textContent=cur().l
 
 /* ---------- persistence ---------- */
 function persist(){try{const o={};VIEWS.forEach(v=>o[v]=data[v].map(clean));localStorage.setItem("hotsx_45k1",JSON.stringify(o));}catch(e){}
-  if(!suspendPush)schedulePush();}
+  if(!suspendPush){touchSession();schedulePush();}}
 function persistUI(){try{localStorage.setItem("hotsx_45k1_ui",JSON.stringify(collapsedGroups));}catch(e){}}
 function restore(){try{
    const s=localStorage.getItem("hotsx_45k1");
@@ -10125,22 +10141,109 @@ async function sheetPost(body){
 async function sheetFetch(){
   const r=await fetch(SHEET()+(SHEET().indexOf("?")>=0?"&":"?")+"_="+Date.now(),{cache:"no-store"});
   const d=await r.json(); return d&&d.ok?d:null;}
+/* ---------- senha de edição + sessão que expira por inatividade ---------- */
+const SESS_KEY="hotsx_45k1_editUntil", LOCALHASH_KEY="hotsx_45k1_pwhash", SALT="hotsx45k1|";
+let warnedExpire=false, lastTouch=0, pwCancelHook=null;
+const SESSION_MS=()=>Math.max(0.05,(+window.EDIT_SESSION_MIN>0?+window.EDIT_SESSION_MIN:15))*60000;
+function sha256(str){
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  let H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const rr=(v,n)=>(v>>>n)|(v<<(32-n));
+  const m=unescape(encodeURIComponent(str)), l=m.length, nb=((l+8)>>6)+1, w=new Array(nb*16).fill(0);
+  for(let i=0;i<l;i++)w[i>>2]|=m.charCodeAt(i)<<(24-(i%4)*8);
+  w[l>>2]|=0x80<<(24-(l%4)*8); w[nb*16-1]=l*8;
+  for(let j=0;j<w.length;j+=16){
+    const x=new Array(64); for(let i=0;i<16;i++)x[i]=w[j+i];
+    for(let i=16;i<64;i++){const s0=rr(x[i-15],7)^rr(x[i-15],18)^(x[i-15]>>>3),s1=rr(x[i-2],17)^rr(x[i-2],19)^(x[i-2]>>>10);x[i]=(x[i-16]+s0+x[i-7]+s1)|0;}
+    let [a,b,c,d,e,f,g,h]=H;
+    for(let i=0;i<64;i++){const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+x[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0;
+      h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;}
+    H=[(H[0]+a)|0,(H[1]+b)|0,(H[2]+c)|0,(H[3]+d)|0,(H[4]+e)|0,(H[5]+f)|0,(H[6]+g)|0,(H[7]+h)|0];}
+  return H.map(v=>("00000000"+(v>>>0).toString(16)).slice(-8)).join("");}
+function sessionActive(){
+  let t=0;try{t=parseInt(localStorage.getItem(SESS_KEY)||"0",10)||0;}catch(e){}
+  if(Date.now()>=t)return false;
+  if(SHEET()&&localStorage.getItem(PASS_KEY)===null)return false;
+  return true;}
+function touchSession(force){
+  if(!force&&uiMode!=="edicao")return;
+  const n=Date.now(); if(!force&&n-lastTouch<3000)return;
+  lastTouch=n; warnedExpire=false;
+  try{localStorage.setItem(SESS_KEY,String(n+SESSION_MS()));}catch(e){}}
+function startSession(){lastTouch=0;touchSession(true);}
+function clearSession(){try{localStorage.removeItem(SESS_KEY);localStorage.removeItem(PASS_KEY);}catch(e){}}
+async function expireSession(){
+  if(SHEET()&&pending){try{await pushNow();}catch(e){}}   // não perde o que ainda não foi enviado
+  clearSession();
+  if(uiMode==="edicao"){setUiMode("consulta");toast("Sessão de edição encerrada por inatividade. Digite a senha para voltar a editar.");}}
+function checkSession(){
+  if(uiMode!=="edicao")return;
+  let t=0;try{t=parseInt(localStorage.getItem(SESS_KEY)||"0",10)||0;}catch(e){}
+  const left=t-Date.now();
+  if(left<=0){expireSession();return;}
+  if(left<=60000&&!warnedExpire){warnedExpire=true;toast("A sessão de edição expira em menos de 1 minuto. Clique em qualquer lugar para continuar.");}}
+/* janela de senha (campo oculto). opts: title, sub, confirm, minLen, okText, validate(pw) -> true | "mensagem de erro" */
+function askPassword(opts){
+  return new Promise(resolve=>{
+    const m=$("#pwModal"),i1=$("#pwInput"),i2=$("#pwInput2"),err=$("#pwErr"),ok=$("#pwOk"),cancel=$("#pwCancel");
+    $("#pwTitle").textContent=opts.title||"Senha de edição"; $("#pwSub").textContent=opts.sub||"";
+    i1.style.display="";i1.value="";i2.value="";i2.style.display=opts.confirm?"":"none";i1.placeholder=opts.confirm?"Nova senha":"Senha";
+    $("#pwInfo").style.display="none";err.textContent="";ok.textContent=opts.okText||"Entrar";ok.disabled=false;cancel.textContent="Cancelar";
+    m.classList.add("show"); setTimeout(()=>i1.focus(),30);
+    let busy=false;
+    const finish=v=>{m.classList.remove("show");i1.removeEventListener("keydown",onKey);i2.removeEventListener("keydown",onKey);pwCancelHook=null;i1.value="";i2.value="";resolve(v);};
+    const submit=async()=>{
+      if(busy)return; busy=true; ok.disabled=true; const pw=i1.value; let res=true;
+      if(!pw)res="Digite a senha.";
+      else if(opts.minLen&&pw.length<opts.minLen)res="Use pelo menos "+opts.minLen+" caracteres.";
+      else if(opts.confirm&&pw!==i2.value)res="As senhas não conferem.";
+      else if(opts.validate){try{res=await opts.validate(pw);}catch(e){res="Não foi possível verificar agora. Tente de novo.";}}
+      busy=false; ok.disabled=false;
+      if(res===true)finish(pw); else {err.textContent=(typeof res==="string"?res:"Senha incorreta.");i1.focus();i1.select();}};
+    const onKey=e=>{if(e.key==="Enter"){e.preventDefault();submit();}};
+    i1.addEventListener("keydown",onKey); i2.addEventListener("keydown",onKey);
+    ok.onclick=submit; cancel.onclick=()=>finish(null); $("#pwClose").onclick=()=>finish(null); pwCancelHook=()=>finish(null);});}
+function infoModal(title,sub,text){
+  return new Promise(resolve=>{
+    const m=$("#pwModal"),ok=$("#pwOk"),cancel=$("#pwCancel");
+    $("#pwTitle").textContent=title; $("#pwSub").textContent=sub;
+    $("#pwInput").style.display="none";$("#pwInput2").style.display="none";$("#pwErr").textContent="";
+    const box=$("#pwInfo");box.textContent=text;box.style.display="";
+    ok.textContent="Entendi";ok.disabled=false;cancel.textContent="Copiar linha";
+    m.classList.add("show");
+    const finish=()=>{m.classList.remove("show");pwCancelHook=null;$("#pwInput").style.display="";resolve();};
+    ok.onclick=finish; $("#pwClose").onclick=finish; pwCancelHook=finish;
+    cancel.onclick=()=>{try{navigator.clipboard.writeText(text).then(()=>toast("Linha copiada"),()=>toast("Selecione e copie a linha manualmente"));}catch(e){toast("Selecione e copie a linha manualmente");}};});}
+async function createPasswordFlow(){
+  const pw=await askPassword({title:"Criar senha de edição",sub:"Ainda não existe senha. Defina uma: ela será pedida para entrar no modo Edição.",confirm:true,minLen:4,okText:"Criar senha"});
+  if(pw===null)return false;
+  const hash=sha256(SALT+pw); try{localStorage.setItem(LOCALHASH_KEY,hash);}catch(e){}
+  await infoModal("Senha criada","Ela já vale neste navegador. Para valer para todos, cole esta linha no arquivo config.js do GitHub:",'window.EDIT_PASSWORD_SHA256 = "'+hash+'";');
+  return true;}
+function pwValidateSheet(pw){return sheetPost({action:"check",senha:pw}).then(r=>r.ok?true:(r.erro==="senha"?"Senha incorreta.":"Não consegui falar com a planilha."));}
 async function ensureEditAuth(){
+  if(sessionActive())return true;
   try{
-    let r=await sheetPost({action:"check"});
-    if(r.ok)return true;
-    if(r.erro!=="senha"){toast("Não consegui falar com a planilha. Tente de novo.");return false;}
-    const pass=window.prompt("Senha de edição:")||"";
-    if(!pass)return false;
-    r=await sheetPost({action:"check",senha:pass});
-    if(r.ok){try{localStorage.setItem(PASS_KEY,pass);}catch(e){}return true;}
-    toast("Senha incorreta");return false;
+    if(SHEET()){
+      try{localStorage.removeItem(PASS_KEY);}catch(e){}
+      const r=await sheetPost({action:"check",senha:""});
+      if(r.ok){try{localStorage.setItem(PASS_KEY,"");}catch(e){}startSession();return true;}          // servidor sem senha
+      if(r.erro!=="senha"){toast("Não consegui falar com a planilha. Tente de novo.");return false;}
+      const pw=await askPassword({title:"Senha de edição",sub:"Informe a senha para editar os pontos.",validate:pwValidateSheet});
+      if(pw===null)return false;
+      try{localStorage.setItem(PASS_KEY,pw);}catch(e){} startSession(); return true;}
+    const hash=window.EDIT_PASSWORD_SHA256||localStorage.getItem(LOCALHASH_KEY)||"";
+    if(!hash){const ok=await createPasswordFlow();if(ok)startSession();return ok;}
+    const pw=await askPassword({title:"Senha de edição",sub:"Informe a senha para entrar no modo Edição.",validate:async p=>sha256(SALT+p)===hash?true:"Senha incorreta."});
+    if(pw===null)return false; startSession(); return true;
   }catch(e){toast("Sem conexão com a planilha: edição indisponível agora");return false;}}
 async function requestMode(m){
-  if(m==="edicao"&&SHEET()){
-    const ok=await ensureEditAuth(); if(!ok)return;
-    setUiMode("edicao"); if(pending)pushNow(); return;}
-  setUiMode(m);}
+  if(m!=="edicao"){setUiMode(m);return;}
+  const ok=await ensureEditAuth(); if(!ok)return;
+  touchSession(true); setUiMode("edicao"); if(SHEET()&&pending)pushNow();}
 function applyRemote(views,soft){
   const was=suspendPush; suspendPush=true;
   VIEWS.forEach(k=>{data[k]=(views[k]||[]).map(h=>migrate(Object.assign({},h)));});
@@ -10167,7 +10270,7 @@ async function pushNow(){
       d.ups.forEach(u=>{remoteSigMap[u.view+"|"+u.point.id]=u.sig;});
       d.dels.forEach(x=>{delete remoteSigMap[x.view+"|"+x.id];});
     }else if(r.erro==="senha"){
-      try{localStorage.removeItem(PASS_KEY);}catch(e){}
+      clearSession();
       toast("Senha incorreta ou alterada: suas mudanças ainda não foram para a planilha");setSyncStat("senha inválida");return;
     }else throw new Error(r.erro||"falha");
   }catch(e){setSyncStat("erro ao salvar, tentando de novo…");clearTimeout(pushTimer);pushTimer=setTimeout(pushNow,8000);return;}
@@ -10263,10 +10366,13 @@ addEventListener("DOMContentLoaded",()=>{
   $("#btnExport").onclick=exportJson; $("#btnImport").onclick=()=>$("#fileJson").click();
   $("#fileJson").onchange=e=>{if(e.target.files[0])importJson(e.target.files[0]);e.target.value="";};
   addEventListener("resize",()=>{placePopup2D();});
-  addEventListener("keydown",e=>{if(e.key==="Escape"){ if($("#copyModal").classList.contains("show"))closeCopy(); else if(draw2d)cancelShape(); else closePopup(); }});
+  addEventListener("keydown",e=>{if(e.key==="Escape"){ if(pwCancelHook){pwCancelHook();return;} if($("#copyModal").classList.contains("show"))closeCopy(); else if(draw2d)cancelShape(); else closePopup(); }});
   $("#search").addEventListener("keydown",e=>{if(e.key==="Enter"){const q=e.target.value.trim().toLowerCase();if(!q||view!=="3d")return;const hit=meshes.find(m=>(m.userData.node||"").toLowerCase().includes(q));if(hit){const c=new THREE.Box3().setFromObject(hit).getCenter(new THREE.Vector3());focusPos3D([c.x,c.y,c.z]);toast("Foco em: "+hit.userData.node);}else toast("Nada encontrado");}});
   setUiMode("consulta"); setView("3d");
   autoLoadModel();
+  if(!sessionActive())clearSession();
+  ["pointerdown","keydown","input","wheel"].forEach(ev=>document.addEventListener(ev,()=>touchSession(),true));
+  setInterval(checkSession,5000);
   syncShared();
 });
 })();
