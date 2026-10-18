@@ -256,7 +256,7 @@
   </div>
   <aside>
     <div class="ahead"><h2>Pontos cadastrados</h2><span class="c" id="listCount">0</span></div>
-    <div class="arow only-edit"><button class="btn" id="btnExport">Exportar</button><button class="btn" id="btnImport">Importar</button></div>
+    <div class="arow only-edit"><button class="btn" id="btnExport">Exportar</button><button class="btn" id="btnImport">Importar</button><button class="btn" id="btnPw" title="Alterar a senha de edição">Alterar senha</button></div>
     <div class="scroll"><div class="list" id="list"></div></div>
   </aside>
 </main>
@@ -10142,7 +10142,7 @@ async function sheetFetch(){
   const r=await fetch(SHEET()+(SHEET().indexOf("?")>=0?"&":"?")+"_="+Date.now(),{cache:"no-store"});
   const d=await r.json(); return d&&d.ok?d:null;}
 /* ---------- senha de edição + sessão que expira por inatividade ---------- */
-const SESS_KEY="hotsx_45k1_editUntil", LOCALHASH_KEY="hotsx_45k1_pwhash", SALT="hotsx45k1|";
+const SESS_KEY="hotsx_45k1_editUntil", LOCALHASH_KEY="hotsx_45k1_pwhash", LOCALCFG_KEY="hotsx_45k1_pwhash_cfg", SALT="hotsx45k1|";
 let warnedExpire=false, lastTouch=0, pwCancelHook=null;
 const SESSION_MS=()=>Math.max(0.05,(+window.EDIT_SESSION_MIN>0?+window.EDIT_SESSION_MIN:15))*60000;
 function sha256(str){
@@ -10217,12 +10217,29 @@ function infoModal(title,sub,text){
     const finish=()=>{m.classList.remove("show");pwCancelHook=null;$("#pwInput").style.display="";resolve();};
     ok.onclick=finish; $("#pwClose").onclick=finish; pwCancelHook=finish;
     cancel.onclick=()=>{try{navigator.clipboard.writeText(text).then(()=>toast("Linha copiada"),()=>toast("Selecione e copie a linha manualmente"));}catch(e){toast("Selecione e copie a linha manualmente");}};});}
+/* qual senha vale: a alterada neste navegador vale enquanto o config.js não mudar depois dela; senão vale a do config.js */
+function currentEditHash(){
+  const cfg=window.EDIT_PASSWORD_SHA256||""; let loc="",snap=null;
+  try{loc=localStorage.getItem(LOCALHASH_KEY)||"";snap=localStorage.getItem(LOCALCFG_KEY);}catch(e){}
+  if(loc&&snap!==null&&snap===cfg)return loc;
+  return cfg||loc;}
+function saveLocalHash(hash){try{localStorage.setItem(LOCALHASH_KEY,hash);localStorage.setItem(LOCALCFG_KEY,window.EDIT_PASSWORD_SHA256||"");}catch(e){}}
 async function createPasswordFlow(){
   const pw=await askPassword({title:"Criar senha de edição",sub:"Ainda não existe senha. Defina uma: ela será pedida para entrar no modo Edição.",confirm:true,minLen:4,okText:"Criar senha"});
   if(pw===null)return false;
-  const hash=sha256(SALT+pw); try{localStorage.setItem(LOCALHASH_KEY,hash);}catch(e){}
+  const hash=sha256(SALT+pw); saveLocalHash(hash);
   await infoModal("Senha criada","Ela já vale neste navegador. Para valer para todos, cole esta linha no arquivo config.js do GitHub:",'window.EDIT_PASSWORD_SHA256 = "'+hash+'";');
   return true;}
+async function changePasswordFlow(){
+  if(SHEET()){toast("Com a planilha, a senha é a que está no Code.gs.");return;}
+  const cur=currentEditHash();
+  if(cur){const okp=await askPassword({title:"Alterar senha",sub:"Digite a senha atual.",validate:async p=>sha256(SALT+p)===cur?true:"Senha atual incorreta."});if(okp===null)return;}
+  const pw=await askPassword({title:"Nova senha",sub:"Defina a nova senha de edição.",confirm:true,minLen:4,okText:"Salvar nova senha",
+    validate:async p=>(cur&&sha256(SALT+p)===cur)?"A nova senha deve ser diferente da atual.":true});
+  if(pw===null)return;
+  const hash=sha256(SALT+pw); saveLocalHash(hash); touchSession(true);
+  await infoModal("Senha alterada","Já vale neste navegador. Para valer para todos, troque a linha do arquivo config.js no GitHub por esta:",'window.EDIT_PASSWORD_SHA256 = "'+hash+'";');
+  toast("Senha alterada");}
 function pwValidateSheet(pw){return sheetPost({action:"check",senha:pw}).then(r=>r.ok?true:(r.erro==="senha"?"Senha incorreta.":"Não consegui falar com a planilha."));}
 async function ensureEditAuth(){
   if(sessionActive())return true;
@@ -10235,7 +10252,7 @@ async function ensureEditAuth(){
       const pw=await askPassword({title:"Senha de edição",sub:"Informe a senha para editar os pontos.",validate:pwValidateSheet});
       if(pw===null)return false;
       try{localStorage.setItem(PASS_KEY,pw);}catch(e){} startSession(); return true;}
-    const hash=window.EDIT_PASSWORD_SHA256||localStorage.getItem(LOCALHASH_KEY)||"";
+    const hash=currentEditHash();
     if(!hash){const ok=await createPasswordFlow();if(ok)startSession();return ok;}
     const pw=await askPassword({title:"Senha de edição",sub:"Informe a senha para entrar no modo Edição.",validate:async p=>sha256(SALT+p)===hash?true:"Senha incorreta."});
     if(pw===null)return false; startSession(); return true;
@@ -10363,6 +10380,7 @@ addEventListener("DOMContentLoaded",()=>{
   $("#cpSamePrefix").onclick=()=>cpQuick("prefix"); $("#cpSameType").onclick=()=>cpQuick("type"); $("#cpAll").onclick=()=>cpQuick("all"); $("#cpNone").onclick=()=>cpQuick("none");
   $("#copyModal").addEventListener("click",e=>{if(e.target.id==="copyModal")closeCopy();});
   $("#pSave").onclick=savePanel; $("#pDel").onclick=delHot; $("#pClose").onclick=closePanel;
+  $("#btnPw").onclick=changePasswordFlow; if(SHEET())$("#btnPw").style.display="none";
   $("#btnExport").onclick=exportJson; $("#btnImport").onclick=()=>$("#fileJson").click();
   $("#fileJson").onchange=e=>{if(e.target.files[0])importJson(e.target.files[0]);e.target.value="";};
   addEventListener("resize",()=>{placePopup2D();});
