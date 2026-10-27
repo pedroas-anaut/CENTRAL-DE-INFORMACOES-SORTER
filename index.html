@@ -331,18 +331,18 @@
     </div>
     <div id="stageIdeas">
       <div class="ideas-card">
-        <div class="ideas-kicker">CAIXA DE IDEIAS</div>
-        <h2>Tem uma ideia de melhoria?</h2>
-        <p class="ideas-sub">Técnicos: aponte a câmera do celular para o QR code e responda ao formulário com a sua ideia ou recomendação do que pode ser implementado.</p>
+        <div class="ideas-kicker">FEEDBACK E MELHORIAS</div>
+        <h2>Tem uma ideia ou um feedback?</h2>
+        <p class="ideas-sub">Aponte a câmera do celular para o QR code e responda ao formulário com a sua ideia de melhoria ou o seu feedback sobre a Central de informações do Sorter BRXSP10.</p>
         <div id="ideasQrWrap">
           <div class="qrbox"><canvas id="ideasQr"></canvas></div>
           <a id="ideasUrl" class="ideas-url" target="_blank" rel="noopener"></a>
           <div class="ideas-btns"><button class="btn primary" id="ideasOpen">Abrir formulário</button><button class="btn" id="ideasCopy">Copiar link</button><button class="btn" id="ideasDl">Baixar QR code</button></div>
         </div>
         <div id="ideasEmpty" style="display:none">
-          <div class="ideas-emptybox"><b id="ideasEmptyMsg"></b><span id="ideasEmptyHint">Peça a quem administra o mapa para definir o link (modo Edição, aba Ideias).</span></div>
+          <div class="ideas-emptybox"><b id="ideasEmptyMsg"></b><span id="ideasEmptyHint">Fale com o responsável pelo mapa.</span></div>
         </div>
-        <div class="ideas-edit"><button class="btn" id="ideasSet" style="display:none">Definir link do formulário</button></div>
+        
       </div>
     </div>
     <div id="partUsed" class="partused"></div>
@@ -480,13 +480,6 @@
       <div id="pwInfo" class="pwinfo" style="display:none"></div>
     </div>
     <div class="mfoot"><span></span><div style="display:flex;gap:8px"><button class="btn" id="pwCancel">Cancelar</button><button class="btn primary" id="pwOk">Entrar</button></div></div>
-  </div>
-</div>
-<div id="formModal" class="modal">
-  <div class="mbox pwbox">
-    <div class="mhead"><div><b>Link do formulário</b><br><small>Cole o link do formulário (de preferência o link curto de compartilhamento).</small></div><button id="fmClose" title="Fechar">×</button></div>
-    <div class="mbody"><input type="text" id="fmInput" class="cpinput" placeholder="https://forms.office.com/r/..." autocomplete="off"><div id="fmErr" class="pwerr"></div></div>
-    <div class="mfoot"><span></span><div style="display:flex;gap:8px"><button class="btn" id="fmCancel">Cancelar</button><button class="btn primary" id="fmOk">Salvar</button></div></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -12098,7 +12091,7 @@ window.SEED_VERSION = 5;
 /* ===== Mapa de Equipamentos — 3D + Line A + Line B + Line C + Line D ===== */
 (function(){
 /* ---- versão e canal (estável x beta) ---- */
-const APP_VERSION="1.5", APP_DATE="26/10/2026";
+const APP_VERSION="1.6", APP_DATE="26/10/2026";
 const IN_BETA_DIR=/\/beta(\/|$)/i.test(location.pathname);
 const IS_BETA=IN_BETA_DIR||/[?&]beta=1/.test(location.search);
 const BASE=IN_BETA_DIR?"../":"./";               // no beta, config.js, modelo 3D e JSON publicado vêm da pasta de cima
@@ -12987,17 +12980,6 @@ function askPassword(opts){
     const onKey=e=>{if(e.key==="Enter"){e.preventDefault();submit();}};
     i1.addEventListener("keydown",onKey); i2.addEventListener("keydown",onKey);
     ok.onclick=submit; cancel.onclick=()=>finish(null); $("#pwClose").onclick=()=>finish(null); pwCancelHook=()=>finish(null);});}
-function infoModal(title,sub,text){
-  return new Promise(resolve=>{
-    const m=$("#pwModal"),ok=$("#pwOk"),cancel=$("#pwCancel");
-    $("#pwTitle").textContent=title; $("#pwSub").textContent=sub;
-    $("#pwInput").style.display="none";$("#pwInput2").style.display="none";$("#pwErr").textContent="";
-    const box=$("#pwInfo");box.textContent=text;box.style.display="";
-    ok.textContent="Entendi";ok.disabled=false;cancel.textContent="Copiar linha";
-    m.classList.add("show");
-    const finish=()=>{m.classList.remove("show");pwCancelHook=null;$("#pwInput").style.display="";resolve();};
-    ok.onclick=finish; $("#pwClose").onclick=finish; pwCancelHook=finish;
-    cancel.onclick=()=>{try{navigator.clipboard.writeText(text).then(()=>toast("Linha copiada"),()=>toast("Selecione e copie a linha manualmente"));}catch(e){toast("Selecione e copie a linha manualmente");}};});}
 /* ---- SENHA ÚNICA DE EDIÇÃO ----
    Aqui fica guardado apenas o código (hash) da senha padrão, não o texto dela.
    Para trocar a senha, sem mexer neste arquivo grande, acrescente UMA destas linhas no config.js do GitHub:
@@ -13114,12 +13096,10 @@ function syncShared(){
 /* ---------- aba Ideias: QR code do formulário ---------- */
 const FORM_KEY="hotsx_45k1_formurl", FORMCFG_KEY="hotsx_45k1_formurl_cfg";
 function normUrl(u){u=(u||"").trim();if(!u)return "";if(!/^https?:\/\//i.test(u))u="https://"+u;try{const x=new URL(u);return /\./.test(x.hostname)?x.href:"";}catch(e){return "";}}
-/* o link salvo neste navegador vale enquanto o config.js não mudar depois dele; senão vale o do config.js */
-function currentFormUrl(){
-  const cfg=normUrl(window.IDEAS_FORM_URL||""); let loc="",snap=null;
-  try{loc=localStorage.getItem(FORM_KEY)||"";snap=localStorage.getItem(FORMCFG_KEY);}catch(e){}
-  if(loc&&snap!==null&&snap===cfg)return loc;
-  return cfg||loc;}
+/* Link FIXO do formulário "Feedback e Melhorias". Para trocá-lo sem mexer neste arquivo grande,
+   acrescente no config.js do GitHub:   window.IDEAS_FORM_URL = "https://...";   (se a linha for apagada, volta o link abaixo) */
+const FORM_URL_PADRAO="https://forms.gle/LvnNZyyDNfGFkhX66";
+function currentFormUrl(){return normUrl(window.IDEAS_FORM_URL||"")||normUrl(FORM_URL_PADRAO);}
 function qrObject(text){const q=qrcode(0,"M");q.addData(text);q.make();return q;}
 function drawQr(canvas,text,size){
   const q=qrObject(text), n=q.getModuleCount(), quiet=4, total=n+quiet*2;
@@ -13134,26 +13114,7 @@ function renderIdeas(){
   if(ok){ try{drawQr($("#ideasQr"),url,300);}catch(e){ok=false;tooLong=true;} }
   $("#ideasQrWrap").style.display=ok?"":"none"; $("#ideasEmpty").style.display=ok?"none":"";
   if(ok){const a=$("#ideasUrl");a.textContent=url.length>70?url.slice(0,67)+"…":url;a.href=url;a.title=url;}
-  $("#ideasEmptyMsg").textContent=tooLong?"O link é grande demais para gerar o QR code. Use o link curto de compartilhamento do formulário.":"O link do formulário ainda não foi configurado.";
-  $("#ideasEmptyHint").style.display=editing?"none":"";
-  $("#ideasSet").style.display=editing?"":"none"; $("#ideasSet").textContent=url?"Alterar link do formulário":"Definir link do formulário";}
-function askFormUrl(){
-  return new Promise(resolve=>{
-    const m=$("#formModal"),inp=$("#fmInput"),err=$("#fmErr");
-    inp.value=currentFormUrl(); err.textContent=""; m.classList.add("show"); setTimeout(()=>{inp.focus();inp.select();},30);
-    const finish=v=>{m.classList.remove("show");inp.removeEventListener("keydown",onKey);pwCancelHook=null;resolve(v);};
-    const submit=()=>{const u=normUrl(inp.value);
-      if(!u){err.textContent="Cole um link válido (começa com https://).";return;}
-      try{qrObject(u);}catch(e){err.textContent="Link grande demais para virar QR code. Use o link curto de compartilhamento.";return;}
-      finish(u);};
-    const onKey=e=>{if(e.key==="Enter"){e.preventDefault();submit();}};
-    inp.addEventListener("keydown",onKey);
-    $("#fmOk").onclick=submit; $("#fmCancel").onclick=()=>finish(null); $("#fmClose").onclick=()=>finish(null); pwCancelHook=()=>finish(null);});}
-async function setFormUrlFlow(){
-  const u=await askFormUrl(); if(u===null)return;
-  try{localStorage.setItem(FORM_KEY,u);localStorage.setItem(FORMCFG_KEY,normUrl(window.IDEAS_FORM_URL||""));}catch(e){}
-  touchSession(); renderIdeas();
-  await infoModal("Link salvo","Já aparece neste navegador. Para aparecer para todos, acrescente esta linha no arquivo config.js do GitHub:",'window.IDEAS_FORM_URL = "'+u+'";');}
+  $("#ideasEmptyMsg").textContent=tooLong?"O link é grande demais para gerar o QR code. Use o link curto de compartilhamento do formulário.":"O link do formulário não está disponível no momento.";}
 function downloadQr(){
   const url=currentFormUrl(); if(!url)return;
   try{const c=document.createElement("canvas");const info=drawQr(c,url,1200);if(!info){toast("Não consegui gerar a imagem");return;}
@@ -13207,7 +13168,7 @@ addEventListener("DOMContentLoaded",()=>{
   $("#pgSearch").oninput=()=>renderPartsHome(); $("#plSearch").oninput=()=>refreshList(); $("#partBack").onclick=()=>setView("pecas");
   $("#partHintOk").onclick=()=>{const el=$("#partHint"),kind=el.dataset.kind||"how";hintOff[view+kind]=true;if(kind==="how"){try{localStorage.setItem("hotsx_45k1_hint_pecas","1");}catch(e){}}renderPartHint();};
   $("#ideasOpen").onclick=()=>{const u=currentFormUrl();if(u)window.open(u,"_blank","noopener");};
-  $("#ideasCopy").onclick=copyFormUrl; $("#ideasDl").onclick=downloadQr; $("#ideasSet").onclick=setFormUrlFlow;
+  $("#ideasCopy").onclick=copyFormUrl; $("#ideasDl").onclick=downloadQr;
   $("#btnExport").onclick=exportJson; $("#btnImport").onclick=()=>$("#fileJson").click();
   $("#fileJson").onchange=e=>{if(e.target.files[0])importJson(e.target.files[0]);e.target.value="";};
   addEventListener("resize",()=>{placePopup2D();});
@@ -13215,7 +13176,7 @@ addEventListener("DOMContentLoaded",()=>{
   $("#search").addEventListener("keydown",e=>{if(e.key==="Enter"){const q=e.target.value.trim().toLowerCase();if(!q||view!=="3d")return;const hit=meshes.find(m=>(m.userData.node||"").toLowerCase().includes(q));if(hit){const c=new THREE.Box3().setFromObject(hit).getCenter(new THREE.Vector3());focusPos3D([c.x,c.y,c.z]);toast("Foco em: "+hit.userData.node);}else toast("Nada encontrado");}});
   setUiMode("consulta"); setView("3d");
   autoLoadModel();
-  try{localStorage.removeItem(LOCALHASH_KEY);localStorage.removeItem(LOCALCFG_KEY);}catch(e){}   // senha criada em versões antigas não vale mais
+  try{localStorage.removeItem(LOCALHASH_KEY);localStorage.removeItem(LOCALCFG_KEY);localStorage.removeItem(FORM_KEY);localStorage.removeItem(FORMCFG_KEY);}catch(e){}   // senha criada em versões antigas não vale mais
   if(!sessionActive())clearSession();
   ["pointerdown","keydown","input","wheel"].forEach(ev=>document.addEventListener(ev,()=>touchSession(),true));
   setInterval(checkSession,5000);
