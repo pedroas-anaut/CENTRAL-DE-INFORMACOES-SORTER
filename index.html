@@ -12197,7 +12197,7 @@ window.SEED_OLD_POLY={"an_seed_S01-LMC01":[[0.23928,0.78601],[0.28266,0.78601],[
 /* ===== Mapa de Equipamentos — 3D + Line A + Line B + Line C + Line D ===== */
 (function(){
 /* ---- versão e canal (estável x beta) ---- */
-const APP_VERSION="3.15", APP_DATE="01/11/2026";
+const APP_VERSION="3.16", APP_DATE="01/11/2026";
 const IN_BETA_DIR=/\/beta(\/|$)/i.test(location.pathname);
 const IS_BETA=IN_BETA_DIR||/[?&]beta=1/.test(location.search);
 const BASE=IN_BETA_DIR?"../":"./";               // no beta, config.js, modelo 3D e JSON publicado vêm da pasta de cima
@@ -12720,6 +12720,11 @@ function pubViews(){const o={};VIEWS.forEach(v=>o[v]=data[v].map(clean));return 
 function pubComparar(pv){const a=localMap(),b=mapOf(pv||{});let nov=0,alt=0,rem=0;Object.keys(a).forEach(k=>{if(!(k in b))nov++;else if(a[k]!==b[k])alt++;});Object.keys(b).forEach(k=>{if(!(k in a))rem++;});return {nov:nov,alt:alt,rem:rem};}
 async function pubBuscarPublicada(){try{const r=await fetch(BASE+"pontos-3D-45K1.json?_="+Date.now(),{cache:"no-store"});if(!r.ok)return null;const d=await r.json();return d&&d.views?d:null;}catch(e){return null;}}
 let PUBST=null;
+function pubExplicarResposta(status,txt){const s=String(txt||"").replace(/\s+/g," ").trim().slice(0,160);
+  let dica="O fluxo precisa terminar num nó 'Responder...' devolvendo {\"ok\": true}.";
+  if(/workflow (was started|executed successfully)/i.test(s))dica="Isso significa que o fluxo terminou SEM passar por um nó 'Responder...': normalmente porque o n8n está só ouvindo o nó Webhook ('Listen for test event' dentro do painel do nó) ou porque um nó parou antes. Use 'Execute workflow' no canvas, ou ative o fluxo e use o endereço de PRODUÇÃO.";
+  else if(/<html|<!doctype/i.test(s))dica="Veio uma página HTML (login, erro ou proxy), não a resposta do fluxo. Confira o endereço em PUBLISH_URL.";
+  return "O n8n respondeu ("+status+"): "+(s||"(vazio)")+" — "+dica;}
 async function pubDiagnosticar(){const u=PUB();let alcancou=false,host="";try{host=new URL(u,location.href).host;}catch(e){}
   try{await fetch(u,{method:"GET",mode:"no-cors",cache:"no-store"});alcancou=true;}catch(e){}   // só vê se o endereço responde (sem enviar os dados de novo)
   const teste=/\/webhook-test\//.test(u);
@@ -12749,14 +12754,15 @@ async function pubAbrir(){
 async function pubEnviar(){
   const el=id=>$("#"+id),msg=t=>{el("pubMsg").textContent=t;},autor=el("pubAutor").value.trim().slice(0,40),chave=el("pubChave").value;
   if(!PUBST)return;if(!autor){msg("Informe o seu nome.");return;}if(!chave){msg("Informe a chave de publicação.");return;}
+  if(sha256(SALT+chave)===currentEditHash()){msg("Use uma chave de publicação DIFERENTE da senha de edição do mapa (a senha de edição é fraca e o código dela está no site público).");el("pubChave").focus();return;}
   try{localStorage.setItem(PUBAUTOR_KEY,autor);}catch(e){}
   el("pubOk").disabled=true;msg("Publicando…");
   try{const corpo=new URLSearchParams();corpo.set("chave",chave);corpo.set("autor",autor);corpo.set("resumo",PUBST.resumo);corpo.set("dados",JSON.stringify({v:4,views:PUBST.views}));
-    const r=await fetch(PUB(),{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:corpo});let j=null;try{j=await r.json();}catch(e){}
+    const r=await fetch(PUB(),{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:corpo});const txt=await r.text().catch(()=>"");let j=null;try{j=JSON.parse(txt);}catch(e){}
     if(j&&j.ok){try{sessionStorage.setItem(PUBCHAVE_KEY,chave);}catch(e){}pubSigSet(sigOf(PUBST.views),sigOf(data));el("pubModal").classList.remove("show");toast("Publicado para todos. Aparece para os outros em 1 a 2 minutos.");return;}
     const er=j&&j.erro;
     if(er==="chave"){try{sessionStorage.removeItem(PUBCHAVE_KEY);}catch(e){}msg("Chave incorreta.");}
-    else msg(er==="dados"?"O n8n recusou os dados (formato inválido ou grande demais). Nada foi publicado.":er==="github"?"O n8n não conseguiu gravar no GitHub. Nada foi publicado.":"Resposta inesperada do n8n ("+r.status+"). Nada foi publicado.");
+    else msg(er==="dados"?"O n8n recusou os dados (formato inválido ou grande demais). Nada foi publicado.":er==="github"?"O n8n não conseguiu gravar no GitHub. Nada foi publicado.":"Resposta inesperada do n8n ("+r.status+"). Não dá para saber se publicou: confira o histórico do GitHub.");if(!er)el("pubDiag").textContent=pubExplicarResposta(r.status,txt);
   }catch(e){msg("Não consegui falar com o n8n. Não dá para saber se publicou: confira o histórico do GitHub.");pubDiagnosticar().then(x=>{el("pubDiag").textContent=x;});}
   el("pubOk").disabled=PUBST.exigeConfirma&&!el("pubConfirma").checked;}
 document.addEventListener("click",e=>{const t=e.target;if(!t||!t.closest)return;
