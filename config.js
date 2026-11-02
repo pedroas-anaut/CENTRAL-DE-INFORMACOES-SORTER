@@ -6,4 +6,4 @@ window.SHEET_URL = "";
 // window.SAP_GOOGLE_CLIENT_ID = "COLE-O-ID-AQUI.apps.googleusercontent.com";
 
 // Publicar os pontos para todos pelo n8n (veja 08-Integracoes/publicar-pontos/PUBLICAR-PONTOS.md). Endereco de PRODUCAO do webhook do n8n:
-// window.PUBLISH_URL = "https://web.furycloud.io/api/proxy/verdi_flows/webhook-test/publicar-pontos-TROQUE-ESTE-TEXTO";
+window.PUBLISH_URL = "https://web.furycloud.io/api/proxy/verdi_flows/webhook-test/publicar-pontos-TROQUE-ESTE-TEXTO";
