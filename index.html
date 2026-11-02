@@ -523,11 +523,12 @@
   <div class="sppane" id="spSem" style="display:none"><div class="spnote">Ordens abertas cujo código SAP ainda não está em nenhum ponto do mapa. Vincule o código ao ponto certo (campo Código SAP).</div><div class="sptbl"><table><thead><tr><th>Código SAP</th><th>Ordens</th><th>Exemplo de descrição</th></tr></thead><tbody id="sapSemRows"></tbody></table></div></div>
   <div class="sppane" id="spConectar" style="display:none"><div class="spnote"><b>Buscar as ordens direto do BigQuery</b><br>Cada pessoa usa o <b>próprio acesso</b>. O token fica só na memória desta aba (não é salvo) e é enviado apenas ao Google. Vale por cerca de 1 hora; depois é só colar outro.</div>
     <label class="splab" for="bqProj">Projeto de faturamento</label><input id="bqProj" class="cpinput" placeholder="meli-bi-data" autocomplete="off">
-    <label class="splab" for="bqTok">Token de acesso (Bearer)</label><input id="bqTok" class="cpinput" type="password" placeholder="Cole o token aqui..." autocomplete="off">
-    <div class="spnote">Para gerar o token, no terminal (ou no <i>Cloud Shell</i> do console do Google Cloud) rode, e cole o resultado acima: <code id="bqCmd" title="Clique para copiar">gcloud auth print-access-token</code></div>
+    <div id="bqGoogleBox" style="display:none;flex-direction:column;gap:6px"><button class="btn" id="bqGoogle" type="button">Entrar com Google</button><div class="spnote">Use a sua conta corporativa. Não precisa gerar token; em outro computador é só entrar de novo (cada entrada vale cerca de 1 hora).</div></div>
+    <details class="spadv" id="bqManual" open><summary>Token manual (gcloud)</summary><label class="splab" for="bqTok">Token de acesso (Bearer)</label><input id="bqTok" class="cpinput" type="password" placeholder="Cole o token aqui..." autocomplete="off">
+    <div class="spnote">Para gerar o token, no terminal (ou no <i>Cloud Shell</i> do console do Google Cloud) rode, e cole o resultado acima: <code id="bqCmd" title="Clique para copiar">gcloud auth print-access-token</code></div></details>
     <details class="spadv"><summary>Filtros do Gru II (só mude se precisar)</summary><label class="splab" for="bqCentro">Centro SAP</label><input id="bqCentro" type="text" placeholder="E264" autocomplete="off"><label class="splab" for="bqPref">Local técnico começa por</label><input id="bqPref" type="text" placeholder="MLB-XSP10" autocomplete="off"><label style="display:flex;gap:8px;align-items:center"><input id="bqPrev" type="checkbox"> Incluir preventivas (ZMPS) apenas criadas, sem data</label></details>
     <div class="spbar"><button class="btn" id="bqConectar" type="button">Conectar e buscar</button><button class="btn" id="bqAtualizar" type="button" style="display:none">Atualizar agora</button><span id="bqMsg"></span></div></div>
-  <div class="sppane" id="spVinc" style="display:none"><div class="spnote"><b>Importar vínculos (CSV)</b><br>Duas colunas: o código do ponto no mapa e o código SAP. Exemplo: <code>A0040;10004523</code>. O separador pode ser ; , ou tab. Vale para todos os pontos com esse código (3D e 2D).</div><div class="spbar"><button class="btn" id="sapCsvBtn" type="button">Escolher CSV de vínculos…</button><span id="sapImpMsg"></span></div>
+  <div class="sppane" id="spVinc" style="display:none"><div class="spnote" id="sapVincInfo" style="margin-bottom:8px"></div><div class="spnote"><b>Importar vínculos (CSV)</b><br>Duas colunas: o código do ponto no mapa e o código SAP. Exemplo: <code>A0040;10004523</code>. O separador pode ser ; , ou tab. Vale para todos os pontos com esse código (3D e 2D).</div><div class="spbar"><button class="btn" id="sapCsvBtn" type="button">Escolher CSV de vínculos…</button><span id="sapImpMsg"></span></div>
     <div id="spTeste" style="display:none"><div class="spnote" style="margin-top:12px"><b>Teste sem o SAP</b><br>Carregue um arquivo de ordens no formato do kit de integração (JSON), por exemplo o arquivo de exemplo. Vale só até recarregar a página.</div><div class="spbar"><button class="btn" id="sapFileBtn" type="button">Carregar arquivo de ordens (teste)…</button><span id="sapFileMsg"></span></div></div></div>
 </div></div>
 <input type="file" id="sapFile" accept=".json,application/json" style="display:none"><input type="file" id="sapCsv" accept=".csv,.txt,text/csv" style="display:none">
@@ -12190,7 +12191,7 @@ window.SEED_OLD_POLY={"an_seed_S01-LMC01":[[0.23928,0.78601],[0.28266,0.78601],[
 /* ===== Mapa de Equipamentos — 3D + Line A + Line B + Line C + Line D ===== */
 (function(){
 /* ---- versão e canal (estável x beta) ---- */
-const APP_VERSION="3.7", APP_DATE="31/10/2026";
+const APP_VERSION="3.10", APP_DATE="01/11/2026";
 const IN_BETA_DIR=/\/beta(\/|$)/i.test(location.pathname);
 const IS_BETA=IN_BETA_DIR||/[?&]beta=1/.test(location.search);
 const BASE=IN_BETA_DIR?"../":"./";               // no beta, config.js, modelo 3D e JSON publicado vêm da pasta de cima
@@ -12628,8 +12629,8 @@ function buildPartPopupHTML(h){
     +(h.en?'<div class="en">'+esc(h.en)+'</div>':'')+code+kv+aten+(h.zh?'<div class="zh">Nome em chinês: '+esc(h.zh)+'</div>':'')+lk
     +'<div class="seein popseein" style="display:none"></div></div>';}
 /* ---------- Ordens do SAP por ponto (TESTE v3.3) ---------- */
-const SAP={ord:[],idx:new Map(),meta:null,carregado:false,manual:false,bq:false,t:0};
-const BQ={token:"",proj:"",t:0,ocupado:false,expirou:false};
+const SAP={ord:[],idx:new Map(),meta:null,carregado:false,manual:false,bq:false,t:0,vinc:new Map()};
+const BQ={token:"",proj:"",t:0,ocupado:false,expirou:false,gis:null,google:false,exp:0,silencio:false};
 const SAP_PRI={1:"Muito alta",2:"Alta",3:"M\u00e9dia",4:"Baixa"}, SAP_FECH=/(^|[^A-Z])(ENCERRAD|ENC\.|ENC$|TECO|CLSD|CANCEL|FECHAD|DLFL|ELIMIN|CERR|CTEC)/;
 /* ---------- Conex\u00e3o direta com o BigQuery (v3.7): cada pessoa usa o pr\u00f3prio acesso; o token nunca \u00e9 salvo ---------- */
 const SAP_ROT={"CRTD":"Criada","LIB.":"Liberada"};
@@ -12655,11 +12656,24 @@ async function bqConsultar(proj,sql){
   return rows;}
 function bqFeed(rows){let dw="";const ordens=rows.map(r=>{if(r.dw&&r.dw>dw)dw=r.dw;return {ordem:r.ordem,equip:r.equip,local:r.local,tipo:r.tipo,descricao:r.descricao,status:SAP_ROT[r.status]||r.status,inicio:r.inicio,programada:r.programada,responsavel:r.responsavel};});
   return {atualizado:new Date().toISOString(),dados_ate:dw?dw.slice(0,19).replace(" ","T"):"",fonte:"BigQuery (consulta direta)",ordens:ordens};}
-function bqPreencher(){const c=bqCfg(),set=(id,v)=>{const e=$("#"+id);if(e&&!e.value)e.value=v;};set("bqProj",c.projeto||"meli-bi-data");set("bqCentro",c.centro||"E264");set("bqPref",c.prefixo||"MLB-XSP10");const p=$("#bqPrev");if(p&&!p.dataset.ok){p.checked=!!c.prev;p.dataset.ok="1";}}
+function bqPreencher(){const c=bqCfg(),set=(id,v)=>{const e=$("#"+id);if(e&&!e.value)e.value=v;};set("bqProj",c.projeto||"meli-bi-data");set("bqCentro",c.centro||"E264");set("bqPref",c.prefixo||"MLB-XSP10");const p=$("#bqPrev");if(p&&!p.dataset.ok){p.checked=!!c.prev;p.dataset.ok="1";}const g=!!bqGcid(),gb=$("#bqGoogleBox"),mn=$("#bqManual");if(gb)gb.style.display=g?"flex":"none";if(mn&&g&&!mn.dataset.ok){mn.open=false;mn.dataset.ok="1";}}
+/* ---------- Entrar com Google (v3.8): sem gcloud e sem colar token; o ID do cliente OAuth \u00e9 p\u00fablico por natureza ---------- */
+function bqGcid(){return String(window.SAP_GOOGLE_CLIENT_ID||"").trim();}
+function bqGisPronto(){return !!(window.google&&google.accounts&&google.accounts.oauth2);}
+function bqCarregarGis(){return new Promise((ok,err)=>{if(bqGisPronto())return ok();const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.onerror=()=>err(new Error("gis"));s.onload=()=>{let n=0;(function t(){if(bqGisPronto())ok();else if(n++>50)err(new Error("gis"));else setTimeout(t,100);})();};document.head.appendChild(s);});}
+async function bqEntrarGoogle(silencioso){
+  const msg=t=>{const e=$("#bqMsg");if(e)e.textContent=t;},falha=t=>{BQ.t=Date.now();if(BQ.token||SAP.carregado){BQ.expirou=true;sapBar();}msg(t);};
+  if(!bqGcid()){msg("O login com Google ainda n\u00e3o foi configurado. Use o token manual.");return;}
+  try{await bqCarregarGis();}catch(e){falha("N\u00e3o consegui carregar o login do Google (rede ou bloqueador). Use o token manual.");return;}
+  if(!BQ.gis){BQ.gis=google.accounts.oauth2.initTokenClient({client_id:bqGcid(),scope:window.SAP_GOOGLE_SCOPE||"https://www.googleapis.com/auth/bigquery",
+    callback:r=>{if(!r||r.error||!r.access_token){falha("Login n\u00e3o conclu\u00eddo"+(r&&r.error?" ("+r.error+")":"")+".");return;}BQ.token=r.access_token;BQ.exp=Date.now()+Math.max(1,(r.expires_in||3600)-60)*1000;BQ.google=true;bqConectar(BQ.silencio);},
+    error_callback:e=>falha("Login cancelado ou bloqueado"+(e&&e.type?" ("+e.type+")":"")+". Se o navegador bloqueou a janela, libere pop-ups para este site.")});}
+  BQ.silencio=!!silencioso;if(!silencioso)msg("Abrindo o login do Google...");BQ.gis.requestAccessToken({prompt:""});}
 async function bqConectar(silencioso){
   if(BQ.ocupado)return;const el=id=>$("#"+id),msg=t=>{if(el("bqMsg"))el("bqMsg").textContent=t;};
   const proj=String((el("bqProj")&&el("bqProj").value)||BQ.proj||"").trim().replace(/\s+/g,""),tok=(el("bqTok")&&el("bqTok").value.trim())||BQ.token;
-  if(!proj){msg("Informe o projeto de faturamento.");return;} if(!tok){msg("Cole o token de acesso.");return;}
+  if(el("bqTok")&&el("bqTok").value.trim())BQ.google=false; else if(BQ.google&&BQ.exp&&Date.now()>BQ.exp){BQ.token="";bqEntrarGoogle(silencioso);return;}
+  if(!proj){msg("Informe o projeto de faturamento.");return;} if(!tok){msg(bqGcid()?"Clique em Entrar com Google ou cole um token.":"Cole o token de acesso.");return;}
   const cfg={projeto:proj,centro:el("bqCentro").value.trim(),prefixo:el("bqPref").value.trim(),prev:el("bqPrev").checked};
   try{localStorage.setItem("hotsx_45k1_bq",JSON.stringify(cfg));}catch(e){}      /* salva s\u00f3 o projeto e os filtros; NUNCA o token */
   BQ.token=tok;BQ.proj=proj;BQ.ocupado=true;if(!silencioso)msg("Buscando no BigQuery...");
@@ -12669,7 +12683,14 @@ async function bqConectar(silencioso){
   finally{BQ.ocupado=false;}}
 function sapParse(t){t=String(t).replace(/^\uFEFF/,"");try{return JSON.parse(t);}catch(e){return t.split(/\r?\n/).filter(x=>x.trim()).map(x=>JSON.parse(x));}}
 function sapNorm(c){return String(c==null?"":c).toUpperCase().replace(/\s+/g,"").replace(/^0+(?=\d)/,"");}
-function sapCodes(h){return String((h&&h.sap)||"").split(/[,;\s]+/).map(sapNorm).filter(Boolean);}
+function sapTexto(h){const m=String((h&&h.sap)||"").trim();return m||(h&&SAP.vinc.get(dk(h)))||"";}
+function sapCodes(h){return sapTexto(h).split(/[,;\s]+/).map(sapNorm).filter(Boolean);}
+function sapLerVinculos(txt){const m=new Map();String(txt||"").replace(/^\uFEFF/,"").split(/\r?\n/).forEach((l,i)=>{l=l.trim();if(!l||l[0]==="#")return;const p=l.split(/[;,\t]/).map(x=>x.trim());if(p.length<2||!p[0]||!p[1])return;if(i===0&&/c[o\u00f3]digo|ponto|sap/i.test(p[0]+p[1])&&!/\d/.test(p[1]))return;const k=p[0].toLowerCase(),v=p.slice(1).filter(Boolean).join(", "),a=m.get(k);m.set(k,a?(a.indexOf(v)<0?a+", "+v:a):v);});return m;}
+async function sapCarregarVinculos(){if(!window.fetch)return;const base=window.SAP_VINCULOS_URL||(BASE+"vinculos-sap.csv"),u=base+(base.indexOf("?")>=0?"&":"?")+"_="+Date.now();
+  try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)return;const t=await r.text();if(/^\s*</.test(t))return;const m=sapLerVinculos(t);if(!m.size)return;SAP.vinc=m;sapRefresh();}catch(e){}}
+function sapVincInfo(){const e=$("#sapVincInfo");if(!e)return;if(!SAP.vinc.size){e.innerHTML='<b>Arquivo de v\u00ednculos (vinculos-sap.csv):</b> n\u00e3o encontrado na raiz do site.';return;}
+  const cods=new Set();VIEWS.forEach(v=>(data[v]||[]).forEach(h=>{const k=dk(h);if(k)cods.add(k);}));const sem=[...SAP.vinc.keys()].filter(k=>!cods.has(k));
+  e.innerHTML='<b>Arquivo de v\u00ednculos (vinculos-sap.csv):</b> '+SAP.vinc.size+' c\u00f3digo(s) de ponto, '+(SAP.vinc.size-sem.length)+' com ponto no mapa e '+sem.length+' sem ponto'+(sem.length?' ('+esc(sem.slice(0,12).join(", ").toUpperCase())+(sem.length>12?"\u2026":"")+')':'')+'. Vale para todos que abrirem o mapa; o campo C\u00f3digo SAP do ponto, se preenchido, tem prioridade. A importa\u00e7\u00e3o abaixo \u00e9 s\u00f3 local.';}
 function sapAberta(o){return !SAP_FECH.test(" "+String(o.status||"").toUpperCase());}
 function sapData(s){s=String(s||"").trim();let m;if((m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s)))return new Date(+m[1],+m[2]-1,+m[3]);if((m=/^(\d{2})[\/.](\d{2})[\/.](\d{4})/.exec(s)))return new Date(+m[3],+m[2]-1,+m[1]);return null;}
 function sapDias(o){const d=sapData(o.criada||o.inicio);return d?Math.max(0,Math.floor((Date.now()-d.getTime())/86400000)):null;}
@@ -12683,7 +12704,7 @@ function sapLoad(j,fonte){
   SAP.idx=new Map();SAP.ord.forEach(o=>{[sapNorm(o.equip),sapNorm(o.local)].forEach(k=>{if(!k)return;if(!SAP.idx.has(k))SAP.idx.set(k,[]);const a=SAP.idx.get(k);if(a.indexOf(o)<0)a.push(o);});});
   SAP.meta={atualizado:(j&&j.atualizado)||"",dados_ate:(j&&j.dados_ate)||"",fonte:(j&&j.fonte)||fonte||""};SAP.carregado=true;SAP.t=Date.now();sapRefresh();}
 function sapOrdersOf(h){const seen=new Set(),out=[];sapCodes(h).forEach(k=>(SAP.idx.get(k)||[]).forEach(o=>{if(!seen.has(o.ordem)){seen.add(o.ordem);out.push(o);}}));return out.sort(sapCmp);}
-function sapPopupHtml(h){const cs=sapCodes(h);if(!cs.length)return "";const cod='<small>SAP '+esc(String(h.sap).trim())+'</small>';
+function sapPopupHtml(h){const cs=sapCodes(h);if(!cs.length)return "";const cod='<small>SAP '+esc(sapTexto(h))+'</small>';
   if(!SAP.carregado)return '<div class="sapbox na">Ordens do SAP indispon\u00edveis: conecte ao BigQuery (bot\u00e3o Ordens SAP) '+cod+'</div>';
   const os=sapOrdersOf(h);if(!os.length)return '<div class="sapbox ok">\u2713 Sem ordens abertas no SAP '+cod+'</div>';
   return '<div class="sapbox ord"><div class="saph">\u26a0 '+os.length+' ordem(ns) aberta(s) no SAP '+cod+'</div>'+os.slice(0,3).map(o=>'<div class="sapo"><div class="l1"><b>'+esc(o.ordem)+'</b>'+(o.prioridade?'<span class="pri p'+(parseInt(o.prioridade)||0)+'">'+esc(sapPri(o))+'</span>':(o.tipo?'<span class="pri">'+esc(o.tipo)+'</span>':''))+'</div><div class="d">'+esc(o.descricao||"(sem descri\u00e7\u00e3o)")+'</div><div class="m">'+esc([o.status,o.prioridade?o.tipo:"",sapIdade(o)].filter(Boolean).join(" \u00b7 "))+'</div></div>').join("")+'<button type="button" class="sapall" data-f="'+esc(sapCodes(h)[0])+'">'+(os.length>3?'ver todas ('+os.length+')':'abrir no painel')+'</button></div>';}
@@ -12695,9 +12716,15 @@ function sapBar(){const bar=$("#sapBar");if(!bar)return;bar.style.display="flex"
   $("#sapTxt").innerHTML='Ordens SAP: <b>'+SAP.ord.length+'</b> aberta(s) \u00b7 <b>'+pts+'</b> ponto(s)'+(SAP.meta&&(SAP.meta.dados_ate||SAP.meta.atualizado)?' \u00b7 dados de '+esc(sapQuando(SAP.meta.dados_ate||SAP.meta.atualizado)):'')+(BQ.expirou?' \u00b7 <b style="color:#f87171">token expirou</b>':'');}
 function sapPanelInfo(){const e=$("#pSapInfo");if(!e)return;const cs=sapCodes({sap:$("#pSap").value});e.className="sapfld";if(!cs.length){e.textContent="";return;}
   if(!SAP.carregado){e.textContent="Sem dados do SAP carregados para conferir.";return;}const n=sapOrdersOf({sap:$("#pSap").value}).length;e.textContent=n?("\u26a0 "+n+" ordem(ns) aberta(s) para este c\u00f3digo."):"Nenhuma ordem aberta para este c\u00f3digo.";if(n)e.className="sapfld on";}
-function sapRefresh(){sapDecorate();sapDecorateList();sapBar();sapPanelInfo();if($("#sapModal").classList.contains("show"))sapRender();}
-function sapFetch(){if(!window.fetch||SAP.manual||SAP.bq)return;const base=window.SAP_FEED_URL||(BASE+"ordens-sap.json"),u=base+(base.indexOf("?")>=0?"&":"?")+"_="+Date.now();
-  fetch(u,{cache:"no-store",credentials:(window.SAP_FEED_CREDENTIALS?"include":"same-origin")}).then(r=>r.ok?r:Promise.reject()).catch(()=>fetch(withProxy(u),{cache:"no-store",credentials:(window.SAP_FEED_CREDENTIALS?"include":"same-origin")})).then(r=>r&&r.ok?r.json():null).then(j=>{if(SAP.manual)return;if(j)sapLoad(j,"feed");else sapBar();}).catch(()=>{sapBar();});}
+function sapRefresh(){sapDecorate();sapDecorateList();sapBar();sapPanelInfo();sapVincInfo();if($("#sapModal").classList.contains("show"))sapRender();}
+function sapFeedUrls(){if(window.SAP_FEED_URL)return [window.SAP_FEED_URL];const l=[];if(window.SHEET_URL)l.push(window.SHEET_URL+(window.SHEET_URL.indexOf("?")>=0?"&":"?")+"acao=ordens");l.push(BASE+"ordens-sap.json");return l;}
+async function sapFetch(){if(!window.fetch||SAP.manual||SAP.bq)return;
+  const cred={cache:"no-store",credentials:(window.SAP_FEED_CREDENTIALS?"include":"same-origin")};
+  for(const base of sapFeedUrls()){const u=base+(base.indexOf("?")>=0?"&":"?")+"_="+Date.now();
+    try{const r=await fetch(u,cred).then(x=>x.ok?x:Promise.reject()).catch(()=>fetch(withProxy(u),cred));
+      if(!r||!r.ok)continue;const j=await r.json();
+      if(j&&Array.isArray(j.ordens)){if(!SAP.manual&&!SAP.bq)sapLoad(j,"feed");return;}}catch(e){}}
+  sapBar();}
 function sapLinhas(){const seen=new Set(),out=[];VIEWS.forEach(v=>(data[v]||[]).forEach(h=>{sapOrdersOf(h).forEach(o=>{const k=o.ordem+"|"+(dk(h)||h.id);if(seen.has(k))return;seen.add(k);out.push({o:o,h:h,v:v});});}));return out.sort((a,b)=>sapCmp(a.o,b.o));}
 function sapRender(){const q=($("#sapQ").value||"").trim().toLowerCase();
   $("#sapSub").textContent=SAP.carregado?(SAP.ord.length+" ordem(ns) aberta(s) no arquivo"+(SAP.meta&&(SAP.meta.dados_ate||SAP.meta.atualizado)?" \u00b7 dados de "+sapQuando(SAP.meta.dados_ate||SAP.meta.atualizado):"")+(SAP.meta&&SAP.meta.fonte?" \u00b7 "+SAP.meta.fonte:"")):"Sem dados do SAP carregados";
@@ -12707,7 +12734,7 @@ function sapRender(){const q=($("#sapQ").value||"").trim().toLowerCase();
   SAP.ord.forEach(o=>{const ks=[sapNorm(o.equip),sapNorm(o.local)].filter(Boolean);if(ks.some(k=>lig.has(k)))return;const k=o.equip||o.local||"(sem c\u00f3digo)";if(!sem.has(k))sem.set(k,[]);sem.get(k).push(o);});
   $("#sapSemRows").innerHTML=sem.size?[...sem.entries()].map(([k,a])=>'<tr><td class="s">'+esc(k)+'</td><td>'+a.length+'</td><td>'+esc(a[0].descricao)+'</td></tr>').join(""):'<tr><td colspan="3" style="padding:16px;color:#8fa0b5">Todas as ordens abertas est\u00e3o ligadas a algum ponto.</td></tr>';
   document.querySelectorAll('#sapModal .sptab[data-t="sem"]').forEach(b=>b.textContent="Sem ponto vinculado ("+sem.size+")");document.querySelectorAll('#sapModal .sptab[data-t="ord"]').forEach(b=>b.textContent="Ordens abertas ("+ls.length+")");}
-function sapTab(t){document.querySelectorAll("#sapModal .sptab").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#spOrd").style.display=t==="ord"?"flex":"none";$("#spSem").style.display=t==="sem"?"flex":"none";$("#spVinc").style.display=t==="vinc"?"flex":"none";$("#spConectar").style.display=t==="conectar"?"flex":"none";if(t==="conectar")bqPreencher();}
+function sapTab(t){document.querySelectorAll("#sapModal .sptab").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#spOrd").style.display=t==="ord"?"flex":"none";$("#spSem").style.display=t==="sem"?"flex":"none";$("#spVinc").style.display=t==="vinc"?"flex":"none";$("#spConectar").style.display=t==="conectar"?"flex":"none";if(t==="conectar")bqPreencher();if(t==="vinc")sapVincInfo();}
 function sapOpen(f,tab){$("#sapQ").value=f||"";sapTab(tab||"ord");sapRender();$("#sapModal").classList.add("show");}
 function sapImportCsv(txt){const linhas=txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);let ok=0,pts=0;const nao=[];
   linhas.forEach((l,i)=>{const p=l.split(/[;,\t]/).map(x=>x.trim());if(p.length<2||!p[0]||!p[1])return;if(i===0&&/c[o\u00f3]digo|ponto|sap/i.test(p[0]+p[1])&&!/\d/.test(p[1]))return;
@@ -12719,14 +12746,14 @@ document.addEventListener("click",e=>{const t=e.target;if(!t||!t.closest)return;
   if(g("#sapOpen")){sapOpen("",SAP.carregado?"ord":"conectar");return;} if(g("#sapClose")||t.id==="sapModal"){$("#sapModal").classList.remove("show");return;}
   const tb=g("#sapModal .sptab");if(tb){sapTab(tb.dataset.t);return;}
   const go=g(".sapgo");if(go){const v=go.dataset.v,id=go.dataset.id;$("#sapModal").classList.remove("show");setView(v,()=>{const h=(data[v]||[]).find(x=>x.id===id);if(!h)return;if(uiMode==="edicao")editHot(id);else showPopup(id);});return;}
-  if(g("#bqConectar")||g("#bqAtualizar")){bqConectar(false);return;} if(g("#bqCmd")){try{navigator.clipboard.writeText("gcloud auth print-access-token");toast("Comando copiado");}catch(x){}return;}
+  if(g("#bqGoogle")){bqEntrarGoogle(false);return;} if(g("#bqConectar")||g("#bqAtualizar")){bqConectar(false);return;} if(g("#bqCmd")){try{navigator.clipboard.writeText("gcloud auth print-access-token");toast("Comando copiado");}catch(x){}return;}
   if(g("#sapCsvBtn")){$("#sapCsv").click();return;} if(g("#sapFileBtn")){$("#sapFile").click();return;} },true);
 document.addEventListener("change",e=>{const b=e.target;if(!b||!b.id)return;
   if(b.id==="sapFile"&&b.files[0]){const r=new FileReader();r.onload=()=>{try{SAP.manual=true;sapLoad(sapParse(r.result),"arquivo local");$("#sapFileMsg").textContent=SAP.ord.length+" ordem(ns) aberta(s) carregada(s) do arquivo (vale at\u00e9 recarregar)";toast("Ordens carregadas do arquivo");}catch(x){SAP.manual=false;$("#sapFileMsg").textContent="Arquivo inv\u00e1lido: "+x.message;}b.value="";};r.readAsText(b.files[0]);}
   else if(b.id==="sapCsv"&&b.files[0]){const r=new FileReader();r.onload=()=>{sapImportCsv(String(r.result));b.value="";};r.readAsText(b.files[0]);} });
 document.addEventListener("input",e=>{const b=e.target;if(!b)return;if(b.id==="sapQ")sapRender();else if(b.id==="pSap")sapPanelInfo();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#sapModal").classList.contains("show")){$("#sapModal").classList.remove("show");e.stopPropagation();}},true);
-setTimeout(()=>{if(/[?&]teste=1/.test(location.search)){const e=$("#spTeste");if(e)e.style.display="block";}sapBar();sapFetch();},900);setInterval(()=>{if(!document.hidden)sapFetch();},300000);document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-SAP.t>120000)sapFetch();});
+setTimeout(()=>{if(/[?&]teste=1/.test(location.search)){const e=$("#spTeste");if(e)e.style.display="block";}sapBar();sapFetch();sapCarregarVinculos();},900);setInterval(()=>{if(!document.hidden){sapFetch();sapCarregarVinculos();}},1800000);document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-SAP.t>600000){sapFetch();sapCarregarVinculos();}});
 setInterval(()=>{if(BQ.token&&!BQ.ocupado&&!document.hidden&&Date.now()-BQ.t>1500000)bqConectar(true);},60000);
 function buildPopupHTML(h){if(h.type==="peca")return buildPartPopupHTML(h);const t=TYPES[h.type]||TYPES.outro;const links=(h.links||[]).filter(l=>l&&l.url);
   const ty=h.kind==="loc"?"Localização":t.label;
