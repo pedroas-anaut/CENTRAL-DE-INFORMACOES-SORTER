@@ -318,6 +318,7 @@
   #sideToggle{position:fixed;top:50%;right:301px;transform:translateY(-50%);z-index:28;width:20px;height:54px;padding:0;border:1px solid var(--line);border-right:0;border-radius:10px 0 0 10px;background:var(--panel);color:#8fa0b5;font:700 17px system-ui,sans-serif;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
   #sideToggle:hover{color:#fff;background:#1b2531}
   body.side-off aside{display:none}
+  .pubbox{width:min(540px,94vw)!important}.pubres{font-size:13px;line-height:1.5}.pubwarn{font-size:12.5px;color:#fbbf24;line-height:1.45}.pubwarn:empty{display:none}.publab{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#8fa0b5;margin-top:2px}.pubbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.pubbar span{font-size:12.5px;color:#aab8c9}
   .sapbar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:0 10px 8px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#161d27;font-size:12px;color:#aab8c9}.sapbar b{color:#fbbf24}.sapbar .btn{padding:4px 9px;font-size:12px;white-space:nowrap}
   .sapfld{font-size:11.5px;margin:4px 0 2px;color:#8fa0b5}.sapfld.on{color:#fbbf24}
   .sapbox{margin-top:10px;border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.35;border:1px solid var(--line);background:#12181f}.sapbox small{color:#7f91a8;font-weight:400;margin-left:4px}
@@ -511,10 +512,21 @@
     <div class="ahead"><h2 id="listTitle">Pontos cadastrados</h2><span class="c" id="listCount">0</span></div>
     <div id="plSearchWrap" class="plsearch"><input id="plSearch" type="search" placeholder="Filtrar peças deste desenho…" autocomplete="off"></div>
     <div class="arow only-edit"><button class="btn" id="btnExport">Exportar</button><button class="btn" id="btnImport">Importar</button></div>
+    <div class="arow only-edit" id="pubRow" style="display:none!important"><button class="btn primary" id="btnPublicar" type="button" title="Grava os pontos no GitHub (pelo n8n) para todos verem">Publicar para todos</button></div>
     <div id="sapBar" class="sapbar" style="display:none"><span id="sapTxt"></span><button class="btn" id="sapOpen" type="button">Ver ordens</button></div>
     <div class="scroll"><div class="list" id="list"></div></div>
   </aside>
 </main>
+<div id="pubModal" class="modal"><div class="mbox pubbox">
+  <div class="mhead"><div><b>Publicar para todos</b><br><small>Grava os pontos no GitHub pelo n8n; quem abrir o mapa passa a ver.</small></div><button id="pubClose" type="button" title="Fechar">&times;</button></div>
+  <div class="mbody">
+    <div class="pubres" id="pubResumo"></div>
+    <div class="pubwarn" id="pubAviso"></div>
+    <label class="ck" id="pubConfirmaWrap" style="display:none"><input type="checkbox" id="pubConfirma"> Entendo que isso substitui a versão publicada</label>
+    <div class="publab">Seu nome (vai no histórico do GitHub)</div><input id="pubAutor" class="cpinput" autocomplete="off" placeholder="Ex.: Maria">
+    <div class="publab">Chave de publicação</div><input id="pubChave" class="cpinput" type="password" autocomplete="off" placeholder="Fornecida a quem edita">
+    <div class="pubbar"><button class="btn primary" id="pubOk" type="button" disabled>Publicar</button><button class="btn" id="pubCancel" type="button">Cancelar</button><span id="pubMsg"></span></div>
+  </div></div></div>
 <div id="sapModal" class="modal"><div class="mbox spbox">
   <div class="mhead"><div><b>Ordens SAP abertas</b><br><small id="sapSub"></small></div><button id="sapClose" title="Fechar">&times;</button></div>
   <div class="sptabs"><button class="sptab on" data-t="ord" type="button">Ordens abertas</button><button class="sptab" data-t="sem" type="button">Sem ponto vinculado</button><button class="sptab only-edit" data-t="vinc" type="button">Vincular códigos</button></div>
@@ -12183,7 +12195,7 @@ window.SEED_OLD_POLY={"an_seed_S01-LMC01":[[0.23928,0.78601],[0.28266,0.78601],[
 /* ===== Mapa de Equipamentos — 3D + Line A + Line B + Line C + Line D ===== */
 (function(){
 /* ---- versão e canal (estável x beta) ---- */
-const APP_VERSION="3.12", APP_DATE="01/11/2026";
+const APP_VERSION="3.13", APP_DATE="01/11/2026";
 const IN_BETA_DIR=/\/beta(\/|$)/i.test(location.pathname);
 const IS_BETA=IN_BETA_DIR||/[?&]beta=1/.test(location.search);
 const BASE=IN_BETA_DIR?"../":"./";               // no beta, config.js, modelo 3D e JSON publicado vêm da pasta de cima
@@ -12695,7 +12707,50 @@ document.addEventListener("change",e=>{const b=e.target;if(!b||!b.id)return;
   else if(b.id==="sapCsv"&&b.files[0]){const r=new FileReader();r.onload=()=>{sapImportCsv(String(r.result));b.value="";};r.readAsText(b.files[0]);} });
 document.addEventListener("input",e=>{const b=e.target;if(!b)return;if(b.id==="sapQ")sapRender();else if(b.id==="pSap")sapPanelInfo();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#sapModal").classList.contains("show")){$("#sapModal").classList.remove("show");e.stopPropagation();}},true);
-setTimeout(()=>{if(/[?&]teste=1/.test(location.search)){const e=$("#spTeste");if(e)e.style.display="block";}sapBar();sapFetch();sapCarregarVinculos();},900);setInterval(()=>{if(!document.hidden){sapFetch();sapCarregarVinculos();}},1800000);document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-SAP.t>600000){sapFetch();sapCarregarVinculos();}});
+setTimeout(()=>{if(/[?&]teste=1/.test(location.search)){const e=$("#spTeste");if(e)e.style.display="block";}sapBar();sapFetch();sapCarregarVinculos();pubBtn();},900);setInterval(()=>{if(!document.hidden){sapFetch();sapCarregarVinculos();}},1800000);document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-SAP.t>600000){sapFetch();sapCarregarVinculos();}});
+/* ---------- Publicar para todos (v3.13): o navegador manda os pontos ao n8n, que grava pontos-3D-45K1.json no GitHub ---------- */
+const PUB=()=>IS_BETA?(window.PUBLISH_URL_BETA||""):(window.PUBLISH_URL||"");
+const PUBSIG_KEY="hotsx_45k1_pub_sig", PUBAUTOR_KEY="hotsx_45k1_autor", PUBCHAVE_KEY="hotsx_45k1_pubkey";   // a chave fica só na sessão (sessionStorage), nunca no localStorage
+function pubSigSet(pub,loc){try{localStorage.setItem(PUBSIG_KEY,JSON.stringify({pub:pub,loc:loc}));}catch(e){}}
+function pubSigGet(){try{const o=JSON.parse(localStorage.getItem(PUBSIG_KEY)||"{}");return {pub:(o&&o.pub)||"",loc:(o&&o.loc)||""};}catch(e){return {pub:"",loc:""};}}
+function pubBtn(){const r=$("#pubRow");if(!r)return;if(PUB())r.style.removeProperty("display");else r.style.setProperty("display","none","important");}
+function pubViews(){const o={};VIEWS.forEach(v=>o[v]=data[v].map(clean));return o;}
+function pubComparar(pv){const a=localMap(),b=mapOf(pv||{});let nov=0,alt=0,rem=0;Object.keys(a).forEach(k=>{if(!(k in b))nov++;else if(a[k]!==b[k])alt++;});Object.keys(b).forEach(k=>{if(!(k in a))rem++;});return {nov:nov,alt:alt,rem:rem};}
+async function pubBuscarPublicada(){try{const r=await fetch(BASE+"pontos-3D-45K1.json?_="+Date.now(),{cache:"no-store"});if(!r.ok)return null;const d=await r.json();return d&&d.views?d:null;}catch(e){return null;}}
+let PUBST=null;
+async function pubAbrir(){
+  if(!PUB())return;const el=id=>$("#"+id);el("pubMsg").textContent="";el("pubOk").disabled=true;el("pubConfirmaWrap").style.display="none";el("pubConfirma").checked=false;el("pubAviso").textContent="";
+  el("pubResumo").textContent="Comparando com a versão publicada…";el("pubModal").classList.add("show");
+  try{el("pubAutor").value=localStorage.getItem(PUBAUTOR_KEY)||"";}catch(e){} try{el("pubChave").value=sessionStorage.getItem(PUBCHAVE_KEY)||"";}catch(e){}
+  const views=pubViews(),d=await pubBuscarPublicada(),total=VIEWS.reduce((n,v)=>n+data[v].length,0);PUBST={views:views,exigeConfirma:false,resumo:""};
+  if(!d){el("pubResumo").innerHTML="<b>Não consegui ler a versão publicada.</b> Publicar vai criar ou substituir o arquivo com os "+total+" pontos deste navegador.";PUBST.exigeConfirma=true;PUBST.resumo=total+" pontos";}
+  else{const sigPub=sigOf(d.views);
+    if(sigPub===sigOf(data)){el("pubResumo").textContent="Nada para publicar: este navegador já está igual à versão publicada.";return;}
+    const c=pubComparar(d.views);PUBST.resumo=c.alt+" alterado(s), "+c.nov+" novo(s), "+c.rem+" removido(s)";
+    el("pubResumo").innerHTML="<b>Vai publicar:</b> "+c.alt+" ponto(s) alterado(s), "+c.nov+" novo(s) e "+c.rem+" removido(s), em relação à versão publicada.";
+    const k=pubSigGet();
+    if(k.pub!==sigPub){PUBST.exigeConfirma=true;el("pubAviso").textContent=k.pub?"Atenção: alguém publicou uma versão diferente depois da última vez que este navegador sincronizou. Publicar a sua vai SUBSTITUIR a dele.":"Este navegador ainda não sincronizou com a versão publicada. Publicar vai SUBSTITUIR o que está publicado pelo que está aqui.";}}
+  if(PUBST.exigeConfirma)el("pubConfirmaWrap").style.display="";else el("pubOk").disabled=false;
+}
+async function pubEnviar(){
+  const el=id=>$("#"+id),msg=t=>{el("pubMsg").textContent=t;},autor=el("pubAutor").value.trim().slice(0,40),chave=el("pubChave").value;
+  if(!PUBST)return;if(!autor){msg("Informe o seu nome.");return;}if(!chave){msg("Informe a chave de publicação.");return;}
+  try{localStorage.setItem(PUBAUTOR_KEY,autor);}catch(e){}
+  el("pubOk").disabled=true;msg("Publicando…");
+  try{const corpo=new URLSearchParams();corpo.set("chave",chave);corpo.set("autor",autor);corpo.set("resumo",PUBST.resumo);corpo.set("dados",JSON.stringify({v:4,views:PUBST.views}));
+    const r=await fetch(PUB(),{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:corpo});let j=null;try{j=await r.json();}catch(e){}
+    if(j&&j.ok){try{sessionStorage.setItem(PUBCHAVE_KEY,chave);}catch(e){}pubSigSet(sigOf(PUBST.views),sigOf(data));el("pubModal").classList.remove("show");toast("Publicado para todos. Aparece para os outros em 1 a 2 minutos.");return;}
+    const er=j&&j.erro;
+    if(er==="chave"){try{sessionStorage.removeItem(PUBCHAVE_KEY);}catch(e){}msg("Chave incorreta.");}
+    else msg(er==="dados"?"O n8n recusou os dados (formato inválido ou grande demais). Nada foi publicado.":er==="github"?"O n8n não conseguiu gravar no GitHub. Nada foi publicado.":"Resposta inesperada do n8n ("+r.status+"). Nada foi publicado.");
+  }catch(e){msg("Não consegui falar com o n8n (rede, VPN ou endereço). Nada foi publicado.");}
+  el("pubOk").disabled=PUBST.exigeConfirma&&!el("pubConfirma").checked;}
+document.addEventListener("click",e=>{const t=e.target;if(!t||!t.closest)return;
+  if(t.closest("#btnPublicar")){pubAbrir();return;}
+  if(t.closest("#pubClose")||t.closest("#pubCancel")||t.id==="pubModal"){$("#pubModal").classList.remove("show");return;}
+  if(t.closest("#pubOk")){pubEnviar();}});
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="pubConfirma")$("#pubOk").disabled=!e.target.checked;});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#pubModal").classList.contains("show")){$("#pubModal").classList.remove("show");e.stopPropagation();}},true);
 function buildPopupHTML(h){if(h.type==="peca")return buildPartPopupHTML(h);const t=TYPES[h.type]||TYPES.outro;const links=(h.links||[]).filter(l=>l&&l.url);
   const ty=h.kind==="loc"?"Localização":t.label;
   let lk="";
@@ -13117,7 +13172,7 @@ function sigOf(o){return JSON.stringify(VIEWS.map(v=>[v,(o[v]||[]).map(h=>normPo
 function recomputeSeq(){let mx=0;VIEWS.forEach(k=>data[k].forEach(h=>{const n=parseInt((h.id||"").replace(/\D/g,""));if(n>mx)mx=n;}));seq=mx;}
 function adoptShared(R){VIEWS.forEach(k=>{if(R[k]===undefined)return;   /* arquivo publicado antigo não conhece esta aba: mantém a que já existe */
     data[k]=(R[k]||[]).map(h=>migrate(Object.assign({},h)));});
-  fixSeedPolys(); purgeOldChutes(); persist();recomputeSeq();closePanel();closePopup();rebuildMarkers();refreshList();updateMeta();}
+  fixSeedPolys(); purgeOldChutes(); persist();recomputeSeq();closePanel();closePopup();rebuildMarkers();refreshList();updateMeta();pubSigSet(sigOf(R),sigOf(data));}
 function showSyncBar(R,rsig){
   const bar=$("#syncBar"); bar.classList.add("show");
   $("#syncMsg").textContent="Existe uma versão publicada diferente da que está neste navegador.";
@@ -13131,9 +13186,10 @@ function syncSharedJson(){
   fetch(jurl,{cache:"no-store"}).then(r=>r.ok?r:Promise.reject()).catch(()=>fetch(withProxy(jurl),{cache:"no-store"})).then(r=>r&&r.ok?r.json():null).then(d=>{
     if(!d||!d.views)return;
     const lsig=sigOf(data), rsig=sigOf(d.views);
-    if(lsig===rsig)return;                                   // já está igual ao publicado
+    if(lsig===rsig){pubSigSet(rsig,lsig);return;}                                   // já está igual ao publicado
     const sd={};VIEWS.forEach(k=>sd[k]=(window.SEED_DATA&&window.SEED_DATA[k])||[]);
-    if(lsig===sigOf(sd)){adoptShared(d.views);return;}         // navegador sem edições próprias: usa o publicado
+    if(lsig===sigOf(sd)){adoptShared(d.views);return;}
+    {const kn=pubSigGet();if(kn.loc&&lsig===kn.loc){adoptShared(d.views);toast("Versão publicada atualizada");return;}}   // sem edições próprias desde a última publicada: atualiza sozinho         // navegador sem edições próprias: usa o publicado
     let keep=null;try{keep=localStorage.getItem("hotsx_45k1_keep_sig");}catch(e){}
     if(keep===rsig)return;                                   // usuário já escolheu manter a dele para esta versão
     showSyncBar(d.views,rsig);                               // há edições locais diferentes: pergunta, não sobrescreve
