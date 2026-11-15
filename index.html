@@ -318,6 +318,33 @@
   #sideToggle{position:fixed;top:50%;right:301px;transform:translateY(-50%);z-index:28;width:20px;height:54px;padding:0;border:1px solid var(--line);border-right:0;border-radius:10px 0 0 10px;background:var(--panel);color:#8fa0b5;font:700 17px system-ui,sans-serif;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
   #sideToggle:hover{color:#fff;background:#1b2531}
   body.side-off aside{display:none}
+  body.sempts .hot{display:none!important}
+  body.view-ideas #btnPts,body.view-pecashome #btnPts{display:none}
+  #btnPts.on{background:#2a3544;color:#fff}
+  #camPanel{position:absolute;left:12px;bottom:12px;z-index:7;display:none;flex-direction:column-reverse;align-items:flex-start;gap:8px;font:13px system-ui,sans-serif;color:#cdd6e2}
+  #camPanel.ready{display:flex}
+  #camBtn{padding:8px 14px;border-radius:10px;border:1px solid #2a3647;background:rgba(19,26,34,.95);color:#cdd6e2;font:600 13px system-ui,sans-serif;cursor:pointer}
+  #camBtn:hover,#camPanel.open #camBtn{background:#1b2531;color:#fff;border-color:#4a5b73}
+  #camBox{display:none;width:310px;max-height:min(70vh,600px);overflow:auto;padding:12px 12px 14px;border-radius:14px;border:1px solid #2a3647;background:rgba(19,26,34,.97);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  #camPanel.open #camBox{display:block}
+  #camBox .camhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  #camBox .camhead b{font-size:13px;letter-spacing:.02em}
+  #camBox .camhead button{background:none;border:0;color:#8fa0b5;font-size:20px;line-height:1;cursor:pointer}
+  #camBox .camsec{font:700 10.5px system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#7f91a8;margin:12px 0 6px}
+  #camBox .cambtns{display:flex;flex-wrap:wrap;gap:6px}
+  #camBox .cambtns button{padding:5px 10px;border-radius:8px;border:1px solid #2a3647;background:#121a23;color:#cdd6e2;font:600 12px system-ui,sans-serif;cursor:pointer}
+  #camBox .cambtns button:hover{background:#1b2531;color:#fff}
+  #camBox .camrow{display:flex;align-items:center;gap:9px;padding:5px 2px;cursor:pointer}
+  #camBox .camrow input{accent-color:#38bdf8;width:15px;height:15px}
+  #camBox .camrow span{flex:1}
+  #camBox .camrow em{font-style:normal;color:#7f91a8;font-size:12px}
+  #camBox .camsl{display:flex;justify-content:space-between;margin:2px 0 4px}
+  #camBox input[type=range]{width:100%;accent-color:#38bdf8}
+  #camBox .camnote{font-size:11.5px;line-height:1.45;color:#8fa0b5;margin-top:6px}
+  #camBox #camInfo{margin-top:10px;font-size:12px;color:#9fb0c3}
+  body.cam-explodido #ov3d,body.cam-explodido #pop3d{display:none}
+  body.walking #camPanel{display:none!important}
+
   .pubdest{font-size:11.5px;color:#8fa0b5;word-break:break-all}.btn.puboff{opacity:.65}.pubbox{width:min(540px,94vw)!important}.pubres{font-size:13px;line-height:1.5}.pubwarn{font-size:12.5px;color:#fbbf24;line-height:1.45}.pubwarn:empty{display:none}.publab{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#8fa0b5;margin-top:2px}.pubbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.pubbar span{font-size:12.5px;color:#aab8c9}
   .sapbar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:0 10px 8px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#161d27;font-size:12px;color:#aab8c9}.sapbar b{color:#fbbf24}.sapbar .btn{padding:4px 9px;font-size:12px;white-space:nowrap}
   .sapfld{font-size:11.5px;margin:4px 0 2px;color:#8fa0b5}.sapfld.on{color:#fbbf24}
@@ -347,6 +374,7 @@
   <div class="spacer"></div>
   <div class="seg" id="viewseg"><button data-v="3d" class="active">3D</button><button data-v="la">Line A</button><button data-v="lb">Line B</button><button data-v="lc">Line C</button><button data-v="ld">Line D</button><button data-v="infeed">Infeed</button><button data-v="an">Anéis</button><button data-v="ch">Chutes</button><button data-v="pecas">Peças</button><button data-v="ideas">Ideias</button></div><select id="partSel" class="partsel" title="Escolha o desenho de peças"></select>
   <div class="seg" id="seg"><button data-m="consulta" class="active">Consulta</button><button data-m="edicao">Edição</button></div>
+  <button class="btn" id="btnPts" type="button" title="Esconde os pontos desta tela (as formas e a lista continuam)">Esconder pontos</button>
   <button class="btn primary only-3d" id="btnLoad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Carregar .glb</button>
   <button class="btn only-3d" id="btnFrame">Enquadrar</button>
   <button class="btn only-3d" id="btnCam">Câmera original</button>
@@ -364,7 +392,14 @@
         <p>Quando publicado (ex.: GitHub Pages), o modelo carrega sozinho. Se abrir o arquivo localmente, clique em <b>Carregar .glb</b> e selecione o <b>modelo-3D-45K1.glb</b>. Use o seletor no topo para alternar entre <b>3D</b>, <b>Line A</b>, <b>Line B</b>, <b>Line C</b> e <b>Line D</b>.</p>
         <button class="btn primary" id="dzRetry" style="display:none">Tentar novamente</button>
       </div>
-      <div class="loading" id="loading"><div class="spin"></div><div id="loadMsg">Carregando o modelo…</div></div>
+      <div id="camPanel"><button id="camBtn" type="button" title="Esconder equipamentos e afastar por andares">&#9776; Camadas</button>
+        <div id="camBox"><div class="camhead"><b>Camadas e vista explodida</b><button id="camX" type="button" title="Fechar">&times;</button></div>
+          <div class="camsec">Atalhos</div><div class="cambtns" id="camPre"></div>
+          <div class="camsec">Mostrar equipamentos</div><div class="cambtns" style="margin-bottom:4px"><button type="button" id="camAll">Mostrar tudo</button><button type="button" id="camNone">Esconder tudo</button></div><div id="camList"></div>
+          <div class="camsec">Vista explodida</div><div class="camsl"><span>Afastar por andares</span><b id="camVal">0%</b></div><input id="camExp" type="range" min="0" max="100" value="0">
+          <div class="camnote">Separa as peças por altura: piso, leitos e bancos, anel inferior, anel superior e estruturas altas. Os marcadores ficam escondidos enquanto estiver afastado.</div>
+          <div class="cambtns" style="margin-top:10px"><button type="button" id="camReset">Restaurar tudo</button></div><div id="camInfo"></div></div></div>
+        <div class="loading" id="loading"><div class="spin"></div><div id="loadMsg">Carregando o modelo…</div></div>
     </div>
     <div id="stage2d">
       <div id="sheet"><img id="img2d" alt="" />
@@ -12197,7 +12232,7 @@ window.SEED_OLD_POLY={"an_seed_S01-LMC01":[[0.23928,0.78601],[0.28266,0.78601],[
 /* ===== Mapa de Equipamentos — 3D + Line A + Line B + Line C + Line D ===== */
 (function(){
 /* ---- versão e canal (estável x beta) ---- */
-const APP_VERSION="3.16", APP_DATE="01/11/2026";
+const APP_VERSION="3.20", APP_DATE="14/11/2026";
 const IN_BETA_DIR=/\/beta(\/|$)/i.test(location.pathname);
 const IS_BETA=IN_BETA_DIR||/[?&]beta=1/.test(location.search);
 const BASE=IN_BETA_DIR?"../":"./";               // no beta, config.js, modelo 3D e JSON publicado vêm da pasta de cima
@@ -12338,11 +12373,52 @@ function makeLoader(){ const l=new THREE.GLTFLoader();
           return orig(url,type); }; } }
     l.setDRACOLoader(_draco); }catch(e){}
   return l; }
+/* ---------- Camadas: esconder categorias e afastar por andares (TESTE v3.1) ---------- */
+const CAM_CATS=[{k:"carr",l:"Carrinhos do anel",re:/CrossBeltVehicle|Resizer/},{k:"pal",l:"Paletes",re:/Pallet/},{k:"rack",l:"Racks",re:/Rack/},{k:"corr",l:"Corrimãos",re:/Handrail/},{k:"esc",l:"Escadas",re:/Stair/},{k:"set",l:"Setas de sentido",re:/Arrow/},{k:"sen",l:"Sensores e controladores",re:/Controller|Lamp/},{k:"pes",l:"Pessoas",re:/ManStanding|Woman|Worker/},{k:"piso",l:"Pisos e plataformas",re:/Floor/},{k:"chi",l:"Chutes internos"},{k:"che",l:"Chutes externos"},{k:"ind",l:"Baias de indução"},{k:"out",l:"Demais estruturas"}];
+const CAM_NAMED=9, CAM_GAP=6;
+const CAM_PRE=[{n:"Visão limpa",hide:["carr","pal","rack","corr","esc","set","sen","pes"]},{n:"Só os anéis",show:["carr"]},{n:"Só os chutes",show:["chi","che"]},{n:"Só a indução",show:["ind"]}];
+let CAM=null, camRaf=0;
+window.__cam=()=>({meshes:meshes,CAM:CAM,CAM_CATS:CAM_CATS});
+function camPos(x,z){ if((x>-127.6&&x<-116&&z>-20&&z<27)||(x>-95&&x<-82.5&&z>-17&&z<30.5))return 9; if((x>-135.5&&x<-128.7&&z>-24&&z<32)||(x>-83&&x<-77.5&&z>-24&&z<32))return 10; if(z<-19.5||z>29.5)return 11; return 12; }
+function camRedraw(){ /* o app já redesenha o 3D a cada quadro */ }
+function camadasInit(){
+  const n=meshes.length; if(!n)return; model.updateMatrixWorld(true);
+  const box=new THREE.Box3(),c=new THREE.Vector3(),inv=new THREE.Matrix4(),m3=new THREE.Matrix3(),v=new THREE.Vector3(),cache=new Map();
+  CAM={cat:new Uint8Array(n),lvl:new Uint8Array(n),base:new Float32Array(3*n),uy:new Float32Array(3*n),vis:CAM_CATS.map(()=>true),exp:0,n:n,cnt:null};
+  for(let i=0;i<n;i++){ const m=meshes[i]; let hit=-1,p=m;
+    while(p&&hit<0){ if(p.name){ for(let j=0;j<CAM_NAMED;j++){ if(CAM_CATS[j].re.test(p.name)){hit=j;break;} } } p=p.parent; }
+    if(!m.geometry.boundingBox)m.geometry.computeBoundingBox(); box.copy(m.geometry.boundingBox).applyMatrix4(m.matrixWorld); box.getCenter(c);
+    if(hit<0)hit=camPos(c.x,c.z);
+    CAM.cat[i]=hit; CAM.lvl[i]=c.y<1?0:(c.y<3.2?1:(c.y<4.2?2:(c.y<5.4?3:4)));
+    CAM.base[3*i]=m.position.x; CAM.base[3*i+1]=m.position.y; CAM.base[3*i+2]=m.position.z;
+    const par=m.parent; let u=cache.get(par); if(!u){ inv.copy(par.matrixWorld).invert(); m3.setFromMatrix4(inv); u=v.set(0,1,0).applyMatrix3(m3).toArray(); cache.set(par,u); }
+    CAM.uy[3*i]=u[0]; CAM.uy[3*i+1]=u[1]; CAM.uy[3*i+2]=u[2]; }
+  camBuild(); }
+function camBuild(){ const cnt=CAM_CATS.map(()=>0); for(let i=0;i<CAM.n;i++)cnt[CAM.cat[i]]++; CAM.cnt=cnt;
+  document.getElementById("camList").innerHTML=CAM_CATS.map((c,j)=>cnt[j]?'<label class="camrow"><input type="checkbox" data-j="'+j+'" checked><span>'+c.l+'</span><em>'+cnt[j].toLocaleString("pt-BR")+'</em></label>':"").join("");
+  document.getElementById("camPre").innerHTML=CAM_PRE.map((p,i)=>'<button type="button" data-p="'+i+'">'+p.n+'</button>').join("");
+  document.getElementById("camPanel").classList.add("ready"); camInfo(); }
+function camInfo(){ if(!CAM)return; let s=0; for(let j=0;j<CAM.vis.length;j++)if(CAM.vis[j])s+=CAM.cnt[j]; const e=document.getElementById("camInfo"); if(e)e.textContent="Mostrando "+s.toLocaleString("pt-BR")+" de "+CAM.n.toLocaleString("pt-BR")+" peças"; }
+function camApplyVis(){ if(!CAM)return; for(let i=0;i<CAM.n;i++)meshes[i].visible=CAM.vis[CAM.cat[i]]; document.querySelectorAll("#camList input").forEach(b=>{b.checked=CAM.vis[+b.dataset.j];}); camInfo(); camRedraw(); }
+function camApplyExp(){ if(!CAM)return; const off=CAM_GAP*CAM.exp/100;
+  for(let i=0;i<CAM.n;i++){ const l=CAM.lvl[i]; if(!l)continue; const d=l*off,m=meshes[i]; m.position.set(CAM.base[3*i]+CAM.uy[3*i]*d,CAM.base[3*i+1]+CAM.uy[3*i+1]*d,CAM.base[3*i+2]+CAM.uy[3*i+2]*d); }
+  document.getElementById("camVal").textContent=CAM.exp+"%"; document.getElementById("camExp").value=CAM.exp; document.body.classList.toggle("cam-explodido",CAM.exp>0); camRedraw(); }
+function camReset(){ if(!CAM)return; CAM.vis=CAM_CATS.map(()=>true); CAM.exp=0; camApplyVis(); camApplyExp(); }
+document.addEventListener("click",e=>{ const t=e.target; if(!t||!t.closest||!CAM&&!t.closest("#camPanel"))return; const g=s=>t.closest(s);
+  if(g("#camBtn")){document.getElementById("camPanel").classList.toggle("open");return;}
+  if(g("#camX")){document.getElementById("camPanel").classList.remove("open");return;}
+  if(!CAM)return;
+  if(g("#camAll")){CAM.vis=CAM_CATS.map(()=>true);camApplyVis();return;}
+  if(g("#camNone")){CAM.vis=CAM_CATS.map(()=>false);camApplyVis();return;}
+  if(g("#camReset")){camReset();return;}
+  const pb=g("#camPre button"); if(pb){const p=CAM_PRE[+pb.dataset.p]; CAM.vis=CAM_CATS.map((c,j)=>p.hide?!p.hide.includes(c.k):p.show.includes(c.k)); camApplyVis();} });
+document.addEventListener("change",e=>{ const b=e.target; if(CAM&&b&&b.matches&&b.matches("#camList input")){CAM.vis[+b.dataset.j]=b.checked;camApplyVis();} });
+document.addEventListener("input",e=>{ const b=e.target; if(CAM&&b&&b.id==="camExp"){CAM.exp=+b.value; if(!camRaf)camRaf=requestAnimationFrame(()=>{camRaf=0;camApplyExp();});} });
 function onGltf(gltf){ stopWalk(); modelLoading=false; clearTimeout(loadWatch); try{
     if(model) scene.remove(model);
     model=gltf.scene; scene.add(model); meshes=[]; const seen=new Set();
     model.traverse(o=>{ if(o.isMesh){ meshes.push(o); if(o.material&&!seen.has(o.material.uuid)){seen.add(o.material.uuid);o.material.flatShading=true;o.material.side=THREE.DoubleSide;o.material.needsUpdate=true;} } });
-    meshes.forEach(m=>{let p=m,nm="";while(p){if(p.name){nm=p.name;break;}p=p.parent;}m.userData.node=nm;});
+    meshes.forEach(m=>{let p=m,nm="";while(p){if(p.name){nm=p.name;break;}p=p.parent;}m.userData.node=nm;}); try{camadasInit();}catch(e){console.error("camadas",e);}
     try{authoredCam=gltf.parser.json.extras.camera;}catch(e){authoredCam=null;}
     $("#loading").style.display="none"; $("#dz").style.display="none";
     frameAll(); if(view==="3d")rebuildMarkers(); updateMeta(); toast("Modelo carregado");
@@ -12487,7 +12563,7 @@ function onCanvas3D(e){
   const r=renderer.domElement.getBoundingClientRect();
   pointer.x=((e.clientX-r.left)/r.width)*2-1; pointer.y=-((e.clientY-r.top)/r.height)*2+1;
   raycaster.setFromCamera(pointer,camera);
-  const hit=raycaster.intersectObjects(meshes,false)[0];
+  const hit=raycaster.intersectObjects(meshes,false).filter(h=>h.object.visible)[0];
   if(!hit){toast("Clique sobre uma peça do equipamento");return;}
   const h=migrate({id:newId(view),pos:[hit.point.x,hit.point.y,hit.point.z],label:"",type:"conv",kind:"instr",code:"",group:"",notes:"",links:[{title:"",url:""}]});
   cur().push(h); setAddMode(false); rebuildMarkers(); editHot(h.id); persist(); refreshList();
@@ -12585,7 +12661,7 @@ function anAddLabel(){ return "Selecionar "+(anNewType==="ap"?"Access Point":(an
 function updateCats(){ const box=document.getElementById("anCats"); if(!box||view!=="an")return; const arr=data.an||[];
   box.innerHTML='<span class="catlbl">Categoria do novo ponto</span>'+["lsm","ap","cl"].map(k=>{const n=arr.filter(h=>h.type===k).length,tp=TYPES[k]; return '<button type="button" class="catchip'+(anNewType===k?' on':'')+'" data-t="'+k+'" style="--c:'+tp.color+'"><i style="background:'+tp.color+'"></i>'+tp.label+'<b>'+n+'</b></button>';}).join(""); }
 document.addEventListener("click",e=>{ const b=e.target&&e.target.closest?e.target.closest("#anCats .catchip"):null; if(!b)return; anNewType=b.dataset.t; updateCats(); try{updateAddButton();}catch(x){} toast("Novo ponto: "+TYPES[anNewType].label); });
-function rebuildMarkers(){
+function rebuildMarkers(){ptsApply();
   if(is2d()){
     const host=$("#sheet"); host.querySelectorAll(".hot").forEach(n=>n.remove());
     const svg=$("#shapes2d"); let svgHtml="";
@@ -12771,6 +12847,14 @@ document.addEventListener("click",e=>{const t=e.target;if(!t||!t.closest)return;
   if(t.closest("#pubOk")){pubEnviar();}});
 document.addEventListener("change",e=>{if(e.target&&e.target.id==="pubConfirma")$("#pubOk").disabled=!e.target.checked;});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#pubModal").classList.contains("show")){$("#pubModal").classList.remove("show");e.stopPropagation();}},true);
+/* ---------- Esconder / mostrar pontos (v3.20, TESTE): esconde os marcadores da tela atual; a escolha é lembrada por tela ---------- */
+const PTSK="hotsx_45k1_semptos";
+function ptsMap(){try{return JSON.parse(localStorage.getItem(PTSK)||"{}")||{};}catch(e){return {};}}
+function ptsHidden(){return ptsMap()[view]===1;}
+function ptsApply(){const h=ptsHidden();document.body.classList.toggle("sempts",h);const b=$("#btnPts");if(b){b.textContent=h?"Mostrar pontos":"Esconder pontos";b.classList.toggle("on",h);b.title=h?"Mostra de novo os pontos desta tela":"Esconde os pontos desta tela (as formas e a lista continuam)";}}
+function ptsSet(on){const m=ptsMap();if(on)m[view]=1;else delete m[view];try{localStorage.setItem(PTSK,JSON.stringify(m));}catch(e){}ptsApply();}
+document.addEventListener("click",e=>{const t=e.target;if(t&&t.closest&&t.closest("#btnPts"))ptsSet(!ptsHidden());},true);
+{const o=()=>new MutationObserver(()=>ptsApply()).observe(document.body,{attributes:true,attributeFilter:["class"]});if(document.body)o();else addEventListener("DOMContentLoaded",o);}   /* troca de tela muda a classe do body */
 function buildPopupHTML(h){if(h.type==="peca")return buildPartPopupHTML(h);const t=TYPES[h.type]||TYPES.outro;const links=(h.links||[]).filter(l=>l&&l.url);
   const ty=h.kind==="loc"?"Localização":t.label;
   let lk="";
@@ -13084,7 +13168,7 @@ function cpApply(){
 function delHot(){data[view]=cur().filter(x=>x.id!==selId);selId=null;closePanel();rebuildMarkers();persist();refreshList();toast("Ponto removido");}
 function closePanel(){selId=null;$("#panel").classList.remove("show");renderVertexHandles();markSelected();}
 
-function setAddMode(on){addMode=on;updateAddButton();if(on)toast("Clique numa peça para soltar o ponto");}
+function setAddMode(on){addMode=on;updateAddButton();if(on){if(ptsHidden()){ptsSet(false);toast("Pontos mostrados. Clique numa peça para soltar o ponto");}else toast("Clique numa peça para soltar o ponto");}}
 function updateAddButton(){const on=view==="3d"?addMode:!!draw2d;
   $("#btnAdd").classList.toggle("primary",on);
   $("#btnAdd").innerHTML=on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg> Cancelar':addBtnHtml();
